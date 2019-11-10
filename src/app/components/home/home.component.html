@@ -1,0 +1,5 @@
+<div *ngIf="data">
+  <ng-container *ngFor="let results of data?.results">
+    <p>{{ results.title }}</p>
+  </ng-container>
+</div>
