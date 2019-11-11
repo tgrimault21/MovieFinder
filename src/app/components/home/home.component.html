@@ -1,5 +1,17 @@
-<div *ngIf="data">
-  <ng-container *ngFor="let results of data?.results">
-    <p>{{ results.title }}</p>
+<div *ngIf="extract && dataMovie">
+  <ng-container *ngFor="let result of extract ; let i = index">
+    <mat-card class="movie-card">
+      <mat-card-header>
+        <mat-card-title>{{ result?.title }}</mat-card-title>
+      </mat-card-header>
+      <img mat-card-image [src]="'http://image.tmdb.org/t/p/w185' + result.poster_path" alt="Poster image">
+      <mat-card-content>
+        <p>Release date : {{ result?.release_date }}
+        <p>Duration : {{ dataMovie[i]?.runtime }} minutes</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button (click)="openDialog()">Fiche complète</button>
+      </mat-card-actions>
+    </mat-card>
   </ng-container>
 </div>
