@@ -1,3 +1,17 @@
+<form class="example-form" #search="ngForm" (ngSubmit)="movieResearch(search)">
+  <mat-form-field class="example-full-width">
+    <input matInput placeholder="Search for a movie" [(ngModel)]="name" name="searchMovie">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Genres selection</mat-label>
+    <mat-select [(ngModel)]="filter1" name="filterGenres" multiple>
+      <mat-option *ngFor="let genre of genresList" [value]="genre">{{genre.name}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button mat-stroked-button>Search</button>
+</form>
+
+
 <div *ngIf="extract && dataMovie">
   <ng-container *ngFor="let result of extract ; let i = index">
     <mat-card class="movie-card">
@@ -10,7 +24,7 @@
         <p>Duration : {{ dataMovie[i]?.runtime }} minutes</p>
       </mat-card-content>
       <mat-card-actions>
-        <button mat-button (click)="openDialog()">Fiche complète</button>
+        <button mat-stroked-button (click)="openDialog()">Fiche complète</button>
       </mat-card-actions>
     </mat-card>
   </ng-container>
