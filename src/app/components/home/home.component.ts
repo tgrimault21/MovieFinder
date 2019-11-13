@@ -23,14 +23,14 @@ export class HomeComponent implements OnInit {
   genresList: string[] = [];
   genresInterface: Genres;
   genreIDs: any[] = [];
-  moviesAfterGenreFilter: any[] = [];
+  moviesAfterGenreFilter: any = [];
 
   constructor(private http: HttpClient, public dialog: MatDialog) {
   }
 
   ngOnInit() {
     if(this.dataMovie.length == 0) {
-      this.getPopularMovies();
+      this.getPopularMovies(null);
     }
     this.getGenres();
   }
@@ -54,50 +54,43 @@ export class HomeComponent implements OnInit {
     return console.log(data);
   }
 
-  movieResearch(search: NgForm) {
+  filterMoviesByGenre(filterGenres, res) {
     var i = 0;
+    this.dataMovie = [];
+    this.genreIDs = [];
+    filterGenres.map(genre => {
+      this.genreIDs.push(genre.id);
+    });
+    this.moviesAfterGenreFilter = (res as any).results.filter(movie => {
+      movie.genre_ids.map(id => {
+        i += this.genreIDs.indexOf(id);
+      })
+      if(i > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    })
+  }
+
+  movieResearch(search: NgForm) {
     console.log(search);
     if(search.form.value.searchMovie){
       this.http.get("https://api.themoviedb.org/3/search/movie?api_key=9e2b8a1d23b0a9148f8bb5bf8f512bd8&language=en-US&include_adult=false&query=" + search.form.value.searchMovie).subscribe(res => {
-        this.dataMovie = [];
-        this.genreIDs = [];
-        search.form.value.filterGenres.map(genre => {
-          this.genreIDs.push(genre.id);
-        });
-        this.moviesAfterGenreFilter = (res as any).results.filter(movie => {
-          movie.genre_ids.map(id => {
-            i += this.genreIDs.indexOf(id);
-          })
-          if(i > 0) {
-            return true;
-          } else {
-            return false;
-          }
-        })
-        console.log({message: "ids", data: this.genreIDs})
-        console.log({message: "movies", data: this.moviesAfterGenreFilter})
+        if(search.form.value.filterGenres) {
+          this.filterMoviesByGenre(search.form.value.filterGenres, res);
+        } else {
+          this.moviesAfterGenreFilter = res;
+        }
         this.extraction(this.moviesAfterGenreFilter, this.nbDisplay);
       });
-    } else {
-      this.getPopularMovies();
     }
   }
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(InformationsComponent, {
-      width: '250px'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-    });
-  }
-
-  getPopularMovies() {
+  getPopularMovies(search: NgForm) {
     this.http.get("https://api.themoviedb.org/3/movie/popular?language=en-US&api_key=9e2b8a1d23b0a9148f8bb5bf8f512bd8").subscribe(res => {
-      this.popularMovies = res;
-      console.log({message: "popularMovies", data: this.popularMovies})
-      this.extraction(this.popularMovies, this.nbDisplay);
+      console.log({message: "popularMovies", data: res})
+      this.extraction(res, this.nbDisplay);
     });
   }
 
@@ -118,6 +111,16 @@ export class HomeComponent implements OnInit {
         me.dataMovie.push(res);
       });
     })
+  }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(InformationsComponent, {
+      width: '250px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
   }
 
 }

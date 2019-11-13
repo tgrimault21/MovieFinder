@@ -1,6 +1,6 @@
 <form class="example-form" #search="ngForm" (ngSubmit)="movieResearch(search)">
   <mat-form-field class="example-full-width">
-    <input matInput placeholder="Search for a movie" [(ngModel)]="name" name="searchMovie">
+    <input matInput placeholder="Search for a movie" [(ngModel)]="name" name="searchMovie" required>
   </mat-form-field>
   <mat-form-field>
     <mat-label>Genres selection</mat-label>
@@ -8,7 +8,7 @@
       <mat-option *ngFor="let genre of genresList" [value]="genre">{{genre.name}}</mat-option>
     </mat-select>
   </mat-form-field>
-  <button mat-stroked-button>Search</button>
+  <button mat-stroked-button [disabled]="name && name != '' ? false : true">Search</button>
 </form>
 
 
