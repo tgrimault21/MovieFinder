@@ -24,6 +24,10 @@ export class HomeComponent implements OnInit {
   genresInterface: Genres;
   genreIDs: any[] = [];
   moviesAfterGenreFilter: any = [];
+  filter2: any = "2000";
+  filter3: any = "2020";
+  storageWatched: any[] = [];
+  storageToWatch: any[] = [];
 
   constructor(private http: HttpClient, public dialog: MatDialog) {
   }
@@ -46,12 +50,62 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  genreFilter(values) {
-    console.log({message: "data movies", data: this.dataMovie})
-  }
-
   console(data) {
     return console.log(data);
+  }
+
+  addWatched(id) {
+    this.setStorageWatched();
+    if(!this.storageWatched.includes(id)){
+      this.storageWatched.push(id);
+    } else {
+      let index = this.storageWatched.indexOf(id);
+      this.storageWatched.splice(index,1);
+    }
+    localStorage.setItem("watched", JSON.stringify(this.storageWatched));
+    console.log(JSON.parse(localStorage.getItem("watched")))
+  }
+
+  addToWatch(id) {
+    this.setStorageToWatch();
+    if(!this.storageToWatch.includes(id)){
+      this.storageToWatch.push(id);
+    } else {
+      let index = this.storageToWatch.indexOf(id);
+      this.storageToWatch.splice(index,1);
+    }
+    localStorage.setItem("toWatch", JSON.stringify(this.storageToWatch));
+    console.log(JSON.parse(localStorage.getItem("toWatch")))
+  }
+
+  isWatched(id) {
+    if(JSON.parse(localStorage.getItem("watched")) && JSON.parse(localStorage.getItem("watched")).includes(id)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  isToWatch(id) {
+    if(JSON.parse(localStorage.getItem("toWatch")) && JSON.parse(localStorage.getItem("toWatch")).includes(id)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  setStorageWatched() {
+    if(JSON.parse(localStorage.getItem("watched"))) this.storageWatched = JSON.parse(localStorage.getItem("watched"));
+  }
+
+  setStorageToWatch() {
+    if(JSON.parse(localStorage.getItem("toWatch"))) this.storageToWatch = JSON.parse(localStorage.getItem("toWatch"));
+  }
+
+  getYear(releaseDate) {
+    releaseDate = releaseDate.split("-");
+    var year = releaseDate[0];
+    return year;
   }
 
   filterMoviesByGenre(filterGenres, res) {
@@ -73,14 +127,30 @@ export class HomeComponent implements OnInit {
     })
   }
 
+  filterMoviesByReleaseDateAfter(filterYear, res) {
+    this.moviesAfterGenreFilter = res.filter(movie => this.getYear(movie.release_date) >= filterYear.toString())
+  }
+
+  filterMoviesByReleaseDateBefore(filterYear, res) {
+    this.moviesAfterGenreFilter = res.filter(movie => this.getYear(movie.release_date) < filterYear.toString())
+  }
+
   movieResearch(search: NgForm) {
     console.log(search);
+    if(!search.form.value.filterYearAfter || search.form.value.filterYearAfter>"2019") this.filter2 = null;
+    if(!search.form.value.filterYearBefore || search.form.value.filterYearBefore>"2020" || search.form.value.filterYearBefore<=search.form.value.filterYearAfter) this.filter3 = null;
     if(search.form.value.searchMovie){
       this.http.get("https://api.themoviedb.org/3/search/movie?api_key=9e2b8a1d23b0a9148f8bb5bf8f512bd8&language=en-US&include_adult=false&query=" + search.form.value.searchMovie).subscribe(res => {
         if(search.form.value.filterGenres) {
           this.filterMoviesByGenre(search.form.value.filterGenres, res);
         } else {
-          this.moviesAfterGenreFilter = res;
+          this.moviesAfterGenreFilter = (res as any).results;
+        }
+        if(search.form.value.filterYearAfter) {
+          this.filterMoviesByReleaseDateAfter(search.form.value.filterYearAfter, this.moviesAfterGenreFilter);
+        }
+        if(search.form.value.filterYearBefore) {
+          this.filterMoviesByReleaseDateBefore(search.form.value.filterYearBefore, this.moviesAfterGenreFilter);
         }
         this.extraction(this.moviesAfterGenreFilter, this.nbDisplay);
       });

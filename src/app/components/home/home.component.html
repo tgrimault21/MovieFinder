@@ -8,6 +8,12 @@
       <mat-option *ngFor="let genre of genresList" [value]="genre">{{genre.name}}</mat-option>
     </mat-select>
   </mat-form-field>
+  <mat-form-field class="example-full-width">
+    <input matInput type="number" placeholder="Movie released after..." [(ngModel)]="filter2" name="filterYearAfter">
+  </mat-form-field>
+  <mat-form-field class="example-full-width">
+    <input matInput type="number" placeholder="Movie released before..." [(ngModel)]="filter3" name="filterYearBefore">
+  </mat-form-field>
   <button mat-stroked-button [disabled]="name && name != '' ? false : true">Search</button>
 </form>
 
@@ -17,6 +23,14 @@
     <mat-card class="movie-card">
       <mat-card-header>
         <mat-card-title>{{ result?.title }}</mat-card-title>
+        <mat-button-toggle-group name="save" aria-label="Save Movie" multiple>
+          <mat-button-toggle mat-icon-button aria-label="watched button" [checked]="isWatched(result?.id)" (change)="addWatched(result?.id)">
+            <mat-icon>check</mat-icon>
+          </mat-button-toggle>
+          <mat-button-toggle mat-icon-button aria-label="to watch button" [checked]="isToWatch(result?.id)" (change)="addToWatch(result?.id)">
+            <mat-icon>remove_red_eye</mat-icon>
+          </mat-button-toggle>
+        </mat-button-toggle-group>
       </mat-card-header>
       <img mat-card-image [src]="'http://image.tmdb.org/t/p/w185' + result.poster_path" alt="Poster image">
       <mat-card-content>

@@ -11,6 +11,8 @@ import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatSelectModule} from '@angular/material/select';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import { InformationsComponent } from './components/informations/informations.component';
 
 @NgModule({
@@ -30,7 +32,9 @@ import { InformationsComponent } from './components/informations/informations.co
     MatButtonModule,
     FormsModule,
     ReactiveFormsModule,
-    MatSelectModule
+    MatSelectModule,
+    MatIconModule,
+    MatButtonToggleModule
   ],
   providers: [],
   bootstrap: [AppComponent],
