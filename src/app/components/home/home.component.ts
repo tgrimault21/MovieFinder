@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { InformationsComponent } from '../informations/informations.component';
+import { TowatchlistComponent } from '../towatchlist/towatchlist.component';
+import { WatchedlistComponent } from '../watchedlist/watchedlist.component';
 import {NgForm} from '@angular/forms';
 
 export interface Genres {
@@ -54,7 +56,7 @@ export class HomeComponent implements OnInit {
     return console.log(data);
   }
 
-  addWatched(id) {
+  addWatched(id, watchedlist) {
     this.setStorageWatched();
     if(!this.storageWatched.includes(id)){
       this.storageWatched.push(id);
@@ -63,10 +65,10 @@ export class HomeComponent implements OnInit {
       this.storageWatched.splice(index,1);
     }
     localStorage.setItem("watched", JSON.stringify(this.storageWatched));
-    console.log(JSON.parse(localStorage.getItem("watched")))
+    watchedlist.getMoviesWatched();
   }
 
-  addToWatch(id) {
+  addToWatch(id, towatchlist) {
     this.setStorageToWatch();
     if(!this.storageToWatch.includes(id)){
       this.storageToWatch.push(id);
@@ -75,7 +77,7 @@ export class HomeComponent implements OnInit {
       this.storageToWatch.splice(index,1);
     }
     localStorage.setItem("toWatch", JSON.stringify(this.storageToWatch));
-    console.log(JSON.parse(localStorage.getItem("toWatch")))
+    towatchlist.getMoviesToWatch();
   }
 
   isWatched(id) {
@@ -117,13 +119,9 @@ export class HomeComponent implements OnInit {
     });
     this.moviesAfterGenreFilter = (res as any).results.filter(movie => {
       movie.genre_ids.map(id => {
-        i += this.genreIDs.indexOf(id);
+        this.genreIDs.includes(id) ? i++ : '';
       })
-      if(i > 0) {
-        return true;
-      } else {
-        return false;
-      }
+      return i>0;
     })
   }
 
@@ -183,9 +181,10 @@ export class HomeComponent implements OnInit {
     })
   }
 
-  openDialog(): void {
+  openDialog(result): void {
     const dialogRef = this.dialog.open(InformationsComponent, {
-      width: '250px'
+      width: '450px',
+      data: result
     });
 
     dialogRef.afterClosed().subscribe(result => {

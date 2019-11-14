@@ -1,45 +1,58 @@
-<form class="example-form" #search="ngForm" (ngSubmit)="movieResearch(search)">
-  <mat-form-field class="example-full-width">
-    <input matInput placeholder="Search for a movie" [(ngModel)]="name" name="searchMovie" required>
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Genres selection</mat-label>
-    <mat-select [(ngModel)]="filter1" name="filterGenres" multiple>
-      <mat-option *ngFor="let genre of genresList" [value]="genre">{{genre.name}}</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field class="example-full-width">
-    <input matInput type="number" placeholder="Movie released after..." [(ngModel)]="filter2" name="filterYearAfter">
-  </mat-form-field>
-  <mat-form-field class="example-full-width">
-    <input matInput type="number" placeholder="Movie released before..." [(ngModel)]="filter3" name="filterYearBefore">
-  </mat-form-field>
-  <button mat-stroked-button [disabled]="name && name != '' ? false : true">Search</button>
-</form>
+<mat-toolbar>
+  <mat-toolbar-row class="title">
+    <h1>MovieFinder</h1>
+  </mat-toolbar-row>
 
+  <mat-toolbar-row class="row-form">
+    <form class="form-search" #search="ngForm" (ngSubmit)="movieResearch(search)">
+      <mat-form-field class="movie-search">
+        <input matInput placeholder="Search for a movie" [(ngModel)]="name" name="searchMovie" required>
+      </mat-form-field>
+      <mat-form-field class="field genre-filter" *ngIf="name">
+        <mat-label>Genres selection</mat-label>
+        <mat-select [(ngModel)]="filter1" name="filterGenres" multiple>
+          <mat-option *ngFor="let genre of genresList" [value]="genre">{{genre.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="field year-filter" *ngIf="name">
+        <input matInput type="number" placeholder="Movie released after..." [(ngModel)]="filter2" name="filterYearAfter">
+      </mat-form-field>
+      <mat-form-field class="field year-filter" *ngIf="name">
+        <input matInput type="number" placeholder="Movie released before..." [(ngModel)]="filter3" name="filterYearBefore">
+      </mat-form-field>
+      <button mat-stroked-button [disabled]="name && name != '' ? false : true" class="button-form">Search</button>
+    </form>
+  </mat-toolbar-row>
+</mat-toolbar>
+<mat-tab-group>
+  <mat-tab label="Movies List">
+    <div *ngIf="extract && dataMovie" class="cards-list">
+      <ng-container *ngFor="let result of extract ; let i = index">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>{{ result?.title }}</mat-card-title>
+            <mat-button-toggle-group name="save" aria-label="Save Movie" multiple>
+              <mat-button-toggle matTooltip="Add to Watched list" mat-icon-button aria-label="watched button" [checked]="isWatched(result?.id)" (change)="addWatched(result?.id, watchedlist)">
+                <mat-icon>check</mat-icon>
+              </mat-button-toggle>
+              <mat-button-toggle matTooltip="Add to To Watch list" mat-icon-button aria-label="to watch button" [checked]="isToWatch(result?.id)" (change)="addToWatch(result?.id, towatchlist)">
+                <mat-icon>remove_red_eye</mat-icon>
+              </mat-button-toggle>
+            </mat-button-toggle-group>
+          </mat-card-header>
+          <img mat-card-image [src]="'http://image.tmdb.org/t/p/w185' + result.poster_path" alt="Poster image">
+          <mat-card-content>
+            <p *ngIf="result?.release_date">Release date : {{ result?.release_date }}</p>
+            <p *ngIf="dataMovie[i]?.runtime">Duration : {{ dataMovie[i]?.runtime }} minutes</p>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-stroked-button (click)="openDialog(result)">Fiche complète</button>
+          </mat-card-actions>
+        </mat-card>
+      </ng-container>
+    </div>
+   </mat-tab>
 
-<div *ngIf="extract && dataMovie">
-  <ng-container *ngFor="let result of extract ; let i = index">
-    <mat-card class="movie-card">
-      <mat-card-header>
-        <mat-card-title>{{ result?.title }}</mat-card-title>
-        <mat-button-toggle-group name="save" aria-label="Save Movie" multiple>
-          <mat-button-toggle mat-icon-button aria-label="watched button" [checked]="isWatched(result?.id)" (change)="addWatched(result?.id)">
-            <mat-icon>check</mat-icon>
-          </mat-button-toggle>
-          <mat-button-toggle mat-icon-button aria-label="to watch button" [checked]="isToWatch(result?.id)" (change)="addToWatch(result?.id)">
-            <mat-icon>remove_red_eye</mat-icon>
-          </mat-button-toggle>
-        </mat-button-toggle-group>
-      </mat-card-header>
-      <img mat-card-image [src]="'http://image.tmdb.org/t/p/w185' + result.poster_path" alt="Poster image">
-      <mat-card-content>
-        <p>Release date : {{ result?.release_date }}
-        <p>Duration : {{ dataMovie[i]?.runtime }} minutes</p>
-      </mat-card-content>
-      <mat-card-actions>
-        <button mat-stroked-button (click)="openDialog()">Fiche complète</button>
-      </mat-card-actions>
-    </mat-card>
-  </ng-container>
-</div>
+  <mat-tab label="Watched Movies"> <app-watchedlist #watchedlist></app-watchedlist> </mat-tab>
+  <mat-tab label="Movies to watch"> <app-towatchlist #towatchlist></app-towatchlist> </mat-tab>
+</mat-tab-group>

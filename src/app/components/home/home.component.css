@@ -1,13 +1,38 @@
-.movie-card {
-  max-width: 400px;
+.title {
+  margin: 10px 0 20px 0;
 }
 
-.example-form {
-  min-width: 150px;
-  max-width: 500px;
+.row-form {
+  height:100%;
+}
+
+.form-search {
   width: 100%;
 }
 
-.example-full-width {
-  width: 100%;
+.field {
+  margin-left: 10px;
+}
+
+.movie-search {
+  width: 25%;
+}
+
+.genre-filter {
+  width: 35%;
+}
+
+.year-filter {
+  width: 15%;
+}
+
+.button-form {
+  display: flex;
+  width: 120px;
+}
+
+.cards-list {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content: center;
 }

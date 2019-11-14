@@ -1,6 +1,13 @@
-<h1 mat-dialog-title>Movie title</h1>
+<h1 mat-dialog-title>{{data?.title}}</h1>
 <div mat-dialog-content>
-  <p>Movie informations</p>
+  <p *ngIf="director"><b>Director</b> : {{director[0].name}}</p>
+  <div *ngIf="actors">
+    <p><b>Major actors</b> :</p>
+    <ul *ngFor="let actor of actors">
+      <li>{{actor.name}}</li>
+    </ul>
+  </div>
+  <p><b>Synopsis</b> : {{data?.overview}}
 </div>
 <div mat-dialog-actions>
   <button mat-button [mat-dialog-close]="" cdkFocusInitial>Close</button>
