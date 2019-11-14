@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class WatchedlistComponent implements OnInit {
 
-  idList: any;
+  idList: any[] = [];
   movieList: any[] = [];
 
   constructor(private http: HttpClient) { }
