@@ -26,6 +26,7 @@ export class InformationsComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  //Get the director and the top 5 actors of the movie we want more details on
   getCredits() {
     if(this.data){
       this.http.get("https://api.themoviedb.org/3/movie/" + this.data.id + "/credits?api_key=9e2b8a1d23b0a9148f8bb5bf8f512bd8").subscribe(res => {
