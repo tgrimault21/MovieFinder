@@ -26,8 +26,8 @@
 </mat-toolbar>
 <mat-tab-group>
   <mat-tab label="Movies List">
-    <div *ngIf="extract && dataMovie" class="cards-list">
-      <ng-container *ngFor="let result of extract ; let i = index">
+    <div *ngIf="dataMovie" class="cards-list">
+      <ng-container *ngFor="let result of dataMovie ; let i = index">
         <mat-card>
           <mat-card-header>
             <mat-card-title>{{ result?.title }}</mat-card-title>
@@ -43,7 +43,7 @@
           <img mat-card-image [src]="'http://image.tmdb.org/t/p/w185' + result.poster_path" alt="Poster image">
           <mat-card-content>
             <p *ngIf="result?.release_date">Release date : {{ result?.release_date }}</p>
-            <p *ngIf="dataMovie[i]?.runtime">Duration : {{ dataMovie[i]?.runtime }} minutes</p>
+            <p *ngIf="result?.runtime">Duration : {{ dataMovie[i]?.runtime }} minutes</p>
           </mat-card-content>
           <mat-card-actions>
             <button mat-stroked-button (click)="openDialog(result)">More details</button>

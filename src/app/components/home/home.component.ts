@@ -173,7 +173,7 @@ export class HomeComponent implements OnInit {
     } else {
       this.extract = movies.slice(0,nbDisplay);
     }
-    this.getMovieDetails(movies);
+    this.getMovieDetails(this.extract);
   }
 
   //Put details of every movie shown on the screen in an array
