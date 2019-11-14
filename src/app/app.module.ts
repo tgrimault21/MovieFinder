@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http'
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -13,13 +13,20 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatSelectModule} from '@angular/material/select';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatTooltipModule} from '@angular/material/tooltip';
 import { InformationsComponent } from './components/informations/informations.component';
+import { WatchedlistComponent } from './components/watchedlist/watchedlist.component';
+import { TowatchlistComponent } from './components/towatchlist/towatchlist.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    InformationsComponent
+    InformationsComponent,
+    WatchedlistComponent,
+    TowatchlistComponent
   ],
   imports: [
     BrowserModule,
@@ -34,10 +41,16 @@ import { InformationsComponent } from './components/informations/informations.co
     ReactiveFormsModule,
     MatSelectModule,
     MatIconModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    MatToolbarModule,
+    MatTabsModule,
+    MatTooltipModule
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [InformationsComponent]
+  entryComponents: [InformationsComponent],
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA
+  ]
 })
 export class AppModule { }

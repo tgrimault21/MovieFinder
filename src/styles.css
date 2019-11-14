@@ -1,4 +1,39 @@
 /* You can add global styles to this file, and also import other style files */
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-color: #ccc;}
+
+.mat-tab-header {
+  background-color: #f5f5f5;
+  padding-top: 10px;
+}
+
+.mat-button-wrapper {
+  margin: 0 auto;
+}
+
+.mat-tab-label {
+  width: 33%;
+}
+
+.mat-card {
+  width: 300px;
+  margin: 20px;
+}
+
+.mat-card-image {
+  box-sizing: border-box;
+  padding: 0 8px 0 8px;
+}
+
+.mat-card-header {
+  height: 70px;
+}
+
+.mat-card-header-text {
+  flex: 2;
+}
+
+.mat-button-toggle-group {
+  height: 50px;
+}
