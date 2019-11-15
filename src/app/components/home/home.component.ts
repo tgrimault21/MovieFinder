@@ -110,7 +110,6 @@ export class HomeComponent implements OnInit {
   //Test if one of the genre selected in the filter is associated to each movie
   filterMoviesByGenre(filterGenres, res) {
     var i = 0;
-    this.dataMovie = [];
     this.genreIDs = [];
     //push the ids of each genre selected in an array
     filterGenres.map(genre => {
@@ -141,6 +140,7 @@ export class HomeComponent implements OnInit {
     //This will search through the database based on the "name of the movie" input, and then we apply filters on the result
     if(search.form.value.searchMovie){
       this.http.get("https://api.themoviedb.org/3/search/movie?api_key=9e2b8a1d23b0a9148f8bb5bf8f512bd8&language=en-US&include_adult=false&query=" + search.form.value.searchMovie).subscribe(res => {
+        this.dataMovie = [];
         if(search.form.value.filterGenres) {
           this.filterMoviesByGenre(search.form.value.filterGenres, res);
         } else {
