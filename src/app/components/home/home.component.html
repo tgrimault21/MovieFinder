@@ -11,7 +11,7 @@
       <mat-form-field class="field genre-filter" *ngIf="name">
         <mat-label>Genres selection</mat-label>
         <mat-select [(ngModel)]="filter1" name="filterGenres" multiple>
-          <mat-option *ngFor="let genre of genresList" [value]="genre">{{genre.name}}</mat-option>
+          <mat-option *ngFor="let genre of genresList$ | async" [value]="genre">{{genre.name}}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field class="field year-filter" *ngIf="name">

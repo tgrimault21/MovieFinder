@@ -19,6 +19,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import { InformationsComponent } from './components/informations/informations.component';
 import { WatchedlistComponent } from './components/watchedlist/watchedlist.component';
 import { TowatchlistComponent } from './components/towatchlist/towatchlist.component';
+import { API_BASE_URL, API_KEY } from './services/tokens';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,10 @@ import { TowatchlistComponent } from './components/towatchlist/towatchlist.compo
     MatTabsModule,
     MatTooltipModule
   ],
-  providers: [],
+  providers: [
+    { provide: API_BASE_URL, useValue: 'https://api.themoviedb.org/3' },
+    { provide: API_KEY, useValue: '9e2b8a1d23b0a9148f8bb5bf8f512bd8' },
+  ],
   bootstrap: [AppComponent],
   entryComponents: [InformationsComponent],
   schemas: [
