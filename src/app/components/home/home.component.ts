@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { InformationsComponent } from '../informations/informations.component';
 import { NgForm } from '@angular/forms';
+import { GenreService, Genres } from 'src/app/services/genre/genre.service';
+import { Observable } from 'rxjs';
 
 export interface Genres {
   genresAPI: any[];
@@ -14,7 +16,7 @@ export interface Genres {
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  public genresList: string[] = [];
+  public genresList$: Observable<Genres>;
   public dataMovie: any[] = [];
   public filterReleasedAfter = '2000';
   public filterReleasedBefore = '2020';
@@ -29,7 +31,8 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private genre: GenreService
   ) {}
 
   public ngOnInit() {
@@ -37,23 +40,7 @@ export class HomeComponent implements OnInit {
       this.getPopularMovies(null);
     }
 
-    this.getGenres();
-  }
-
-  /**
-   * Get the list of each genre existing in API database and display them in the filter
-   */
-  public getGenres() {
-    this.http.get<{ genres: Genres }>('https://api.themoviedb.org/3/genre/movie/list?api_key=9e2b8a1d23b0a9148f8bb5bf8f512bd8&language=en-US')
-      .subscribe(res => {
-        this.genresInterface = {
-          genresAPI: (res as any).genres
-        };
-
-        this.genresInterface.genresAPI.map(genre => {
-          this.genresList.push(genre);
-        });
-      });
+    this.genresList$ = this.genre.list();
   }
 
   /**
@@ -180,25 +167,31 @@ export class HomeComponent implements OnInit {
     //clear release date filters field when they aren't valid input
     if(!search.form.value.filterYearAfter || search.form.value.filterYearAfter>'2019') this.filterReleasedAfter = null;
     if(!search.form.value.filterYearBefore || search.form.value.filterYearBefore>'2020' || search.form.value.filterYearBefore<=search.form.value.filterYearAfter) this.filterReleasedBefore = null;
+
     //This will search through the database based on the 'name of the movie' input, and then we apply filters on the result
-    if(search.form.value.searchMovie){
-      this.http.get('https://api.themoviedb.org/3/search/movie?api_key=9e2b8a1d23b0a9148f8bb5bf8f512bd8&language=en-US&include_adult=false&query=' + search.form.value.searchMovie).subscribe(res => {
-        this.dataMovie = [];
-        if(search.form.value.filterGenres && search.form.value.filterGenres.length!=0) {
-          console.log(search.form.value.filterGenres);
-          this.filterMoviesByGenre(search.form.value.filterGenres, res);
-        } else {
-          this.moviesAfterGenreFilter = (res as any).results;
-        }
-        if(search.form.value.filterYearAfter) {
-          this.filterMoviesByReleaseDateAfter(search.form.value.filterYearAfter, this.moviesAfterGenreFilter);
-        }
-        if(search.form.value.filterYearBefore) {
-          this.filterMoviesByReleaseDateBefore(search.form.value.filterYearBefore, this.moviesAfterGenreFilter);
-        }
-        this.extraction(this.moviesAfterGenreFilter, this.nbDisplay);
-      });
+    if (!search.form.value.searchMovie) {
+      return;
     }
+
+    this.http.get('https://api.themoviedb.org/3/search/movie?api_key=9e2b8a1d23b0a9148f8bb5bf8f512bd8&language=en-US&include_adult=false&query=' + search.form.value.searchMovie).subscribe(res => {
+      this.dataMovie = [];
+      if(search.form.value.filterGenres && search.form.value.filterGenres.length!=0) {
+        console.log(search.form.value.filterGenres);
+        this.filterMoviesByGenre(search.form.value.filterGenres, res);
+      } else {
+        this.moviesAfterGenreFilter = (res as any).results;
+      }
+
+      if(search.form.value.filterYearAfter) {
+        this.filterMoviesByReleaseDateAfter(search.form.value.filterYearAfter, this.moviesAfterGenreFilter);
+      }
+
+      if(search.form.value.filterYearBefore) {
+        this.filterMoviesByReleaseDateBefore(search.form.value.filterYearBefore, this.moviesAfterGenreFilter);
+      }
+
+      this.extraction(this.moviesAfterGenreFilter, this.nbDisplay);
+    });
   }
 
   //Show the list of top popular movies by default
