@@ -15,10 +15,10 @@
         </mat-select>
       </mat-form-field>
       <mat-form-field class="field year-filter" *ngIf="name">
-        <input matInput type="number" placeholder="Movie released after..." [(ngModel)]="filter2" name="filterYearAfter">
+        <input matInput type="number" placeholder="Movie released after..." [(ngModel)]="filterReleasedAfter" name="filterYearAfter">
       </mat-form-field>
       <mat-form-field class="field year-filter" *ngIf="name">
-        <input matInput type="number" placeholder="Movie released before..." [(ngModel)]="filter3" name="filterYearBefore">
+        <input matInput type="number" placeholder="Movie released before..." [(ngModel)]="filterReleasedBefore" name="filterYearBefore">
       </mat-form-field>
       <button mat-stroked-button [disabled]="name && name != '' ? false : true" class="button-form">Search</button>
     </form>
