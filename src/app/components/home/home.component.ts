@@ -19,13 +19,13 @@ export class HomeComponent implements OnInit {
   public filterReleasedAfter = '2000';
   public filterReleasedBefore = '2020';
 
-  public nbDisplay = 10;
-  public extract: any;
-  public genresInterface: Genres;
-  public genreIDs: any[] = [];
-  public moviesAfterGenreFilter: any = [];
-  public storageWatched: number[] = [];
-  public storageToWatch: number[] = [];
+  private nbDisplay = 10;
+  private extract: any;
+  private genresInterface: Genres;
+  private genreIDs: any[] = [];
+  private moviesAfterGenreFilter: any = [];
+  private storageWatched: number[] = [];
+  private storageToWatch: number[] = [];
 
   constructor(
     private http: HttpClient,
@@ -47,7 +47,7 @@ export class HomeComponent implements OnInit {
     this.http.get<{ genres: Genres }>('https://api.themoviedb.org/3/genre/movie/list?api_key=9e2b8a1d23b0a9148f8bb5bf8f512bd8&language=en-US')
       .subscribe(res => {
         this.genresInterface = {
-          genresAPI: res.genres
+          genresAPI: (res as any).genres
         };
 
         this.genresInterface.genresAPI.map(genre => {
@@ -64,8 +64,12 @@ export class HomeComponent implements OnInit {
     console.log(data);
   }
 
-  //Add or remove a movie of a list when we click on a toggle button
-  public addWatched(id, watchedlist) {
+  /**
+   * Add or remove a movie of watched list when we click on a toggle button
+   * @param id id of a movie
+   * @param watchedlist the watchedList component
+   */
+  public addWatched(id: number, watchedlist: any) {
     this.setStorageWatched();
     if(!this.storageWatched.includes(id)){
       this.storageWatched.push(id);
@@ -78,7 +82,12 @@ export class HomeComponent implements OnInit {
     watchedlist.getMoviesWatched();
   }
 
-  public addToWatch(id, towatchlist) {
+  /**
+   * Add or remove a movie of watched list when we click on a toggle button
+   * @param id id of a movie
+   * @param towatchlist the toWatchList Component
+   */
+  public addToWatch(id: number, towatchlist: any) {
     this.setStorageToWatch();
     if(!this.storageToWatch.includes(id)){
       this.storageToWatch.push(id);
@@ -92,7 +101,7 @@ export class HomeComponent implements OnInit {
   }
 
   /**
-   * To keep each toggle button pressed if the movie we test is in the watched or to watch list
+   * To keep watched toggle button pressed if the movie we test is in the watched list
    * @param id the identifier of a media
    * @returns true if the media is watched by the user
    */
@@ -100,28 +109,48 @@ export class HomeComponent implements OnInit {
     return JSON.parse(localStorage.getItem('watched')) && JSON.parse(localStorage.getItem('watched')).includes(id);
   }
 
-  public isToWatch(id) {
+  /**
+   * To keep toWatch toggle button pressed if the movie we test is in the toWatch list
+   * @param id the identifier of a media
+   * @returns true if the media is watched by the user
+   */
+  public isToWatch(id: number): boolean {
     return(JSON.parse(localStorage.getItem('toWatch')) && JSON.parse(localStorage.getItem('toWatch')).includes(id));
   }
 
-  //Put local storage content in an array
+  /**
+   * Put local storage content in an array, for watched movies
+   */
   public setStorageWatched() {
-    if(JSON.parse(localStorage.getItem('watched'))) this.storageWatched = JSON.parse(localStorage.getItem('watched'));
+    if(JSON.parse(localStorage.getItem('watched'))){
+      this.storageWatched = JSON.parse(localStorage.getItem('watched'));
+    } 
   }
 
+  /**
+   * Put local storage content in an array, for toWatch movies
+   */
   public setStorageToWatch() {
     if(JSON.parse(localStorage.getItem('toWatch'))) this.storageToWatch = JSON.parse(localStorage.getItem('toWatch'));
   }
 
-  //Split year from complete date
-  public getYear(releaseDate) {
-    releaseDate = releaseDate.split('-');
-    var year = releaseDate[0];
+  /**
+   * Split year from complete date
+   * @param releaseDate the release date of a movie
+   * @returns only the year part of the date
+   */
+  public getYear(releaseDate: string) {
+    let releaseDateSplit = releaseDate.split('-');
+    let year = releaseDateSplit[0];
     return year;
   }
 
-  //Test if one of the genre selected in the filter is associated to each movie
-  public filterMoviesByGenre(filterGenres, res) {
+  /**
+   * Test if one of the genre selected in the filter is associated to each movie
+   * @param filterGenres 
+   * @param res 
+   */
+  public filterMoviesByGenre(filterGenres: any[], res: Object) {
     var i = 0;
     this.genreIDs = [];
     //push the ids of each genre selected in an array
