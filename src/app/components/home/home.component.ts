@@ -26,9 +26,9 @@ export class HomeComponent implements OnInit {
   genresInterface: Genres;
   genreIDs: any[] = [];
   moviesAfterGenreFilter: any = [];
-  filter2: any = "2000";
-  filter3: any = "2020";
-  storageWatched: any[] = [];
+  filter2 = "2000";
+  filter3 = "2020";
+  storageWatched: number[] = [];
   storageToWatch: any[] = [];
 
   constructor(private http: HttpClient, public dialog: MatDialog) {
@@ -141,7 +141,8 @@ export class HomeComponent implements OnInit {
     if(search.form.value.searchMovie){
       this.http.get("https://api.themoviedb.org/3/search/movie?api_key=9e2b8a1d23b0a9148f8bb5bf8f512bd8&language=en-US&include_adult=false&query=" + search.form.value.searchMovie).subscribe(res => {
         this.dataMovie = [];
-        if(search.form.value.filterGenres) {
+        if(search.form.value.filterGenres && search.form.value.filterGenres.length!=0) {
+          console.log(search.form.value.filterGenres);
           this.filterMoviesByGenre(search.form.value.filterGenres, res);
         } else {
           this.moviesAfterGenreFilter = (res as any).results;
