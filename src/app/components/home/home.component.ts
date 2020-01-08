@@ -4,11 +4,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { InformationsComponent } from '../informations/informations.component';
 import { NgForm } from '@angular/forms';
 import { GenreService, Genres } from 'src/app/services/genre/genre.service';
-import { Observable } from 'rxjs';
-
-export interface Genres {
-  genresAPI: any[];
-}
+import { MovieService, Movie, Response, Movies } from 'src/app/services/movie/movie.service';
+import { Observable, of, EMPTY } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -17,27 +14,29 @@ export interface Genres {
 })
 export class HomeComponent implements OnInit {
   public genresList$: Observable<Genres>;
-  public dataMovie: any[] = [];
+  public movieListPopular$: Observable<Response<Movie>>;
+  public movieListSearch$: Observable<Response<Movie>> = EMPTY;
+  public movieDetails$: Observable<Movie>;
+  public dataMovie: Movies = [];
   public filterReleasedAfter = '2000';
   public filterReleasedBefore = '2020';
 
   private nbDisplay = 10;
-  private extract: any;
-  private genresInterface: Genres;
-  private genreIDs: any[] = [];
-  private moviesAfterGenreFilter: any = [];
+  private extract: Movies;
+  private genreIDs: number[] = [];
+  private moviesAfterGenreFilter: Movies = [];
   private storageWatched: number[] = [];
   private storageToWatch: number[] = [];
 
   constructor(
-    private http: HttpClient,
     private dialog: MatDialog,
-    private genre: GenreService
+    private genre: GenreService,
+    private movie: MovieService
   ) {}
 
   public ngOnInit() {
     if(this.dataMovie.length === 0) {
-      this.getPopularMovies(null);
+      this.getPopularMovies();
     }
 
     this.genresList$ = this.genre.list();
@@ -137,7 +136,7 @@ export class HomeComponent implements OnInit {
    * @param filterGenres 
    * @param res 
    */
-  public filterMoviesByGenre(filterGenres: any[], res: Object) {
+  public filterMoviesByGenre(filterGenres: any[], res: Response<Movie>) {
     var i = 0;
     this.genreIDs = [];
     //push the ids of each genre selected in an array
@@ -145,7 +144,7 @@ export class HomeComponent implements OnInit {
       this.genreIDs.push(genre.id);
     });
     //Only keep movies where at least one of the genres associated with is selected in the filter
-    this.moviesAfterGenreFilter = (res as any).results.filter(movie => {
+    this.moviesAfterGenreFilter = res.results.filter(movie => {
       movie.genre_ids.map(id => {
         this.genreIDs.includes(id) ? i++ : '';
       })
@@ -153,78 +152,103 @@ export class HomeComponent implements OnInit {
     })
   }
 
-  //Comparing the year of the release date of the film with the year in filter input
-  public filterMoviesByReleaseDateAfter(filterYear, res) {
+  /**
+   * Comparing the year of the release date of the film with the year in filter input
+   * @param filterYear 
+   * @param res 
+   */
+  public filterMoviesByReleaseDateAfter(filterYear: number, res: Movies) {
     this.moviesAfterGenreFilter = res.filter(movie => this.getYear(movie.release_date) >= filterYear.toString())
   }
 
-  public filterMoviesByReleaseDateBefore(filterYear, res) {
+  /**
+   * Comparing the year of the release date of the film with the year in filter input
+   * @param filterYear 
+   * @param res 
+   */
+  public filterMoviesByReleaseDateBefore(filterYear: number, res: Movies) {
     this.moviesAfterGenreFilter = res.filter(movie => this.getYear(movie.release_date) < filterYear.toString())
   }
 
-  //Called when the form is submited
+  /**
+   * Called when the form is submited
+   * @param search 
+   */
   public movieResearch(search: NgForm) {
+    let form = search.form.value;
     //clear release date filters field when they aren't valid input
-    if(!search.form.value.filterYearAfter || search.form.value.filterYearAfter>'2019') this.filterReleasedAfter = null;
-    if(!search.form.value.filterYearBefore || search.form.value.filterYearBefore>'2020' || search.form.value.filterYearBefore<=search.form.value.filterYearAfter) this.filterReleasedBefore = null;
+    if(!form.filterYearAfter || form.filterYearAfter>'2019') this.filterReleasedAfter = null;
+    if(!form.filterYearBefore || form.filterYearBefore>'2020' || form.filterYearBefore<=form.filterYearAfter) this.filterReleasedBefore = null;
 
-    //This will search through the database based on the 'name of the movie' input, and then we apply filters on the result
-    if (!search.form.value.searchMovie) {
+    if (!form.searchMovie) {
       return;
     }
 
-    this.http.get('https://api.themoviedb.org/3/search/movie?api_key=9e2b8a1d23b0a9148f8bb5bf8f512bd8&language=en-US&include_adult=false&query=' + search.form.value.searchMovie).subscribe(res => {
-      this.dataMovie = [];
-      if(search.form.value.filterGenres && search.form.value.filterGenres.length!=0) {
-        console.log(search.form.value.filterGenres);
-        this.filterMoviesByGenre(search.form.value.filterGenres, res);
-      } else {
-        this.moviesAfterGenreFilter = (res as any).results;
-      }
+    //This will search through the database based on the 'name of the movie' input, and then we apply filters on the result
+    this.movieListSearch$ = this.movie.search(form.searchMovie);
+    this.movieListSearch$.subscribe(
+      res => {
+        this.dataMovie = [];
 
-      if(search.form.value.filterYearAfter) {
-        this.filterMoviesByReleaseDateAfter(search.form.value.filterYearAfter, this.moviesAfterGenreFilter);
+        if(form.filterGenres && form.filterGenres.length!=0) {
+          this.filterMoviesByGenre(form.filterGenres, res);
+        } else {
+          this.moviesAfterGenreFilter = res.results;
+        }
+  
+        if(form.filterYearAfter) {
+          this.filterMoviesByReleaseDateAfter(form.filterYearAfter, this.moviesAfterGenreFilter);
+        }
+  
+        if(form.filterYearBefore) {
+          this.filterMoviesByReleaseDateBefore(form.filterYearBefore, this.moviesAfterGenreFilter);
+        }
+  
+        this.extraction(this.moviesAfterGenreFilter, this.nbDisplay);
       }
-
-      if(search.form.value.filterYearBefore) {
-        this.filterMoviesByReleaseDateBefore(search.form.value.filterYearBefore, this.moviesAfterGenreFilter);
-      }
-
-      this.extraction(this.moviesAfterGenreFilter, this.nbDisplay);
-    });
+    )
   }
 
-  //Show the list of top popular movies by default
-  public getPopularMovies(search: NgForm) {
-    this.http.get('https://api.themoviedb.org/3/movie/popular?language=en-US&api_key=9e2b8a1d23b0a9148f8bb5bf8f512bd8').subscribe(res => {
-      this.extraction(res, this.nbDisplay);
-    });
+  /**
+   * Show the list of top popular movies by default
+   */
+  public getPopularMovies() {
+    this.movieListPopular$ = this.movie.listPopular();
+    this.movieListPopular$.subscribe(
+      res => {
+        this.extraction(res.results, this.nbDisplay);
+      }
+    );
   }
 
-  //Only 10 movies will be displayed on the screen
-  public extraction(movies, nbDisplay) {
-    if(movies.results) {
-      //depending on where extraction() is called, movies will sometimes already be 'movies.results'
-      this.extract = movies.results.slice(0,nbDisplay);
-      movies = movies.results;
-    } else {
-      this.extract = movies.slice(0,nbDisplay);
-    }
+  /**
+   * Only 10 movies will be displayed on the screen
+   * @param movies 
+   * @param nbDisplay 
+   */
+  public extraction(movies: Movies, nbDisplay: number) {
+    this.extract = movies.slice(0,nbDisplay);
     this.getMovieDetails(this.extract);
   }
 
-  //Put details of every movie shown on the screen in an array
-  public getMovieDetails(movies) {
-    let me = this; //to avoid 'this is undefined' error
-    movies.forEach(function(movie) {
-      me.http.get('https://api.themoviedb.org/3/movie/' + movie.id + '?language=en-US&api_key=9e2b8a1d23b0a9148f8bb5bf8f512bd8').subscribe(res => {
-        me.dataMovie.push(res);
+  /**
+   * Put details of every movie shown on the screen in an array
+   * @param movies 
+   */
+  public getMovieDetails(movies: Movies) {
+    movies.map(film => {
+      this.movieDetails$ = this.movie.fetch(film.id);
+      this.movieDetails$.subscribe( res => {
+        this.dataMovie.push(res);
       });
-    })
+    });
   }
 
-  //Launch InformationsComponent on a modal when we click on 'More details' button
-  public openDialog(result): void {
+  /**
+   * Launch InformationsComponent on a modal when we click on 'More details' button
+   * @param result 
+   */
+  public openDialog(result: Movies): void {
     const dialogRef = this.dialog.open(InformationsComponent, {
       width: '450px',
       data: result
@@ -234,5 +258,4 @@ export class HomeComponent implements OnInit {
       console.log('The dialog was closed');
     });
   }
-
 }
