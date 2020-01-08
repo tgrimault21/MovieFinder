@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { LibraryService } from 'src/app/services/library/library.service';
+import { Movies, MovieService } from 'src/app/services/movie/movie.service';
+import { switchMap } from 'rxjs/operators';
+import { Observable, forkJoin, EMPTY } from 'rxjs';
 
 @Component({
   selector: 'app-towatchlist',
@@ -7,25 +10,25 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./towatchlist.component.css']
 })
 export class TowatchlistComponent implements OnInit {
+  public movieList$: Observable<Movies> = EMPTY;
 
-  idList: any[] = [];
-  movieList: any[] = [];
-
-  constructor(private http: HttpClient) { }
+  constructor(
+    private movie: MovieService,
+    private library: LibraryService
+  ) { }
 
   ngOnInit() {
-    this.getMoviesToWatch();
+    this.movieList$ = this.library.toWatchListChange.pipe(switchMap(
+      ids => this.getMoviesToWatch(ids)
+    ));
+
+    this.library.loadToWatch();
   }
 
   //List in movieList the details of every movie to watch based on the list of ids in local storage
-  getMoviesToWatch() {
-    this.movieList = [];
-    this.idList = JSON.parse(localStorage.getItem("toWatch"));
-    this.idList.map(idMovieToWatch => {
-      this.http.get("https://api.themoviedb.org/3/movie/" + idMovieToWatch + "?api_key=9e2b8a1d23b0a9148f8bb5bf8f512bd8&language=en-US").subscribe(res => {
-        this.movieList.push(res);
-      })
-    })
+  private getMoviesToWatch(ids: number[]): Observable<Movies> {
+    return forkJoin(
+      ids.map(idMovieToWatch => this.movie.fetch(idMovieToWatch))
+    );
   }
-
 }
