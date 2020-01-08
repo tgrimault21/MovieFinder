@@ -1,5 +1,5 @@
 <div *ngIf="movieList" class="cards-list">
-  <ng-container *ngFor="let result of movieList ; let i = index">
+  <ng-container *ngFor="let result of movieList$ | async ; let i = index">
     <mat-card>
       <mat-card-header>
         <mat-card-title>{{ result?.title }}</mat-card-title>
