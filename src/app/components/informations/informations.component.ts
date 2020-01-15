@@ -1,6 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MovieService, Movie } from 'src/app/services/movie/movie.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 export interface DialogData {
   animal: string;
@@ -13,32 +15,53 @@ export interface DialogData {
   styleUrls: ['./informations.component.css']
 })
 export class InformationsComponent implements OnInit {
-
-  director: any;
-  actors: any;
+  /**
+   * @internal
+   */
+  public director$: any;
+  /**
+   * @internal
+   */
+  public actors$: any;
+  /**
+   * @internal
+   */
+  public movieCredits$: Observable<Movie>;
 
   constructor(
     public dialogRef: MatDialogRef<InformationsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private http: HttpClient) {}
+    private movie: MovieService
+    ) {}
 
-  onNoClick(): void {
+  public ngOnInit() {
+    this.getCredits();
+  }
+
+  public onNoClick(): void {
     this.dialogRef.close();
   }
 
-  //Get the director and the top 5 actors of the movie we want more details on
-  getCredits() {
-    if(this.data){
-      this.http.get("https://api.themoviedb.org/3/movie/" + this.data.id + "/credits?api_key=9e2b8a1d23b0a9148f8bb5bf8f512bd8").subscribe(res => {
-        console.log(res)
-        this.director = (res as any).crew.filter(staff => staff.department == "Directing");
-        this.actors = (res as any).cast.slice(0,5);
-      });
+  public console(data: any) {
+    console.log(data);
+  }
+
+  /**
+   * Get the director and the top 5 actors of the movie we want more details on
+   */
+   private getCredits() {
+    if (!this.data) {
+      return;
     }
-  }
 
-  ngOnInit() {
-    this.getCredits()
-  }
+    this.movieCredits$ = this.movie.fetchCredits(this.data.id);
 
+    this.actors$ = this.movieCredits$.pipe(map(res => {
+      return res.cast.slice(0, 5);
+    }));
+
+    this.director$ = this.movieCredits$.pipe(map(res => {
+      return res.crew.filter(staff => staff.department === 'Directing');
+    }));
+  }
 }

@@ -12,7 +12,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-
   margin: 0 auto;
 }
 
-.mat-tab-label {
+.mat-tab-link {
   width: 33%;
 }
 

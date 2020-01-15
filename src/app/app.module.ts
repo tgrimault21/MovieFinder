@@ -20,6 +20,15 @@ import { InformationsComponent } from './components/informations/informations.co
 import { WatchedlistComponent } from './components/watchedlist/watchedlist.component';
 import { TowatchlistComponent } from './components/towatchlist/towatchlist.component';
 import { API_BASE_URL, API_KEY } from './services/tokens';
+import { MovieComponent } from './components/movie/movie.component';
+import { RouterModule, Routes } from '@angular/router';
+import { MoviesComponent } from './components/movies/movies.component';
+
+const appRoutes: Routes = [
+  { path: '', component: MoviesComponent },
+  { path: 'to-watch', component: TowatchlistComponent },
+  { path: 'watched', component: WatchedlistComponent }
+];
 
 @NgModule({
   declarations: [
@@ -27,7 +36,9 @@ import { API_BASE_URL, API_KEY } from './services/tokens';
     HomeComponent,
     InformationsComponent,
     WatchedlistComponent,
-    TowatchlistComponent
+    TowatchlistComponent,
+    MovieComponent,
+    MoviesComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +56,10 @@ import { API_BASE_URL, API_KEY } from './services/tokens';
     MatButtonToggleModule,
     MatToolbarModule,
     MatTabsModule,
-    MatTooltipModule
+    MatTooltipModule,
+    RouterModule.forRoot(
+      appRoutes
+    )
   ],
   providers: [
     { provide: API_BASE_URL, useValue: 'https://api.themoviedb.org/3' },

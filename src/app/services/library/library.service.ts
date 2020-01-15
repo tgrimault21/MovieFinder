@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LibraryService {
-  public toWatchListChange = new Subject<number[]>();
-  public watchedListChange = new Subject<number[]>();
+  public toWatchListChange = new BehaviorSubject<number[]>([]);
+  public watchedListChange = new BehaviorSubject<number[]>([]);
 
   private storageWatched: number[] = [];
   private storageToWatch: number[] = [];
@@ -34,8 +34,7 @@ export class LibraryService {
     localStorage.setItem('watched', JSON.stringify(this.storageWatched));
 
 
-    //put the movie in the watched list to display on 'Watched movies' tab
-    // watchedlist.getMoviesWatched();
+    // put the movie in the watched list to display on 'Watched movies' tab
     this.watchedListChange.next(this.storageWatched);
   }
 
@@ -53,8 +52,7 @@ export class LibraryService {
     }
 
     localStorage.setItem('toWatch', JSON.stringify(this.storageToWatch));
-    //put the movie in the watched list to display on 'Movies To Watch' tab
-    // towatchlist.getMoviesToWatch();
+    // put the movie in the watched list to display on 'Movies To Watch' tab
     this.toWatchListChange.next(this.storageToWatch);
   }
 
@@ -73,7 +71,7 @@ export class LibraryService {
    * @returns true if the media is watched by the user
    */
   public isToWatch(id: number): boolean {
-    return(JSON.parse(localStorage.getItem('toWatch')) && JSON.parse(localStorage.getItem('toWatch')).includes(id));
+    return JSON.parse(localStorage.getItem('toWatch')) && JSON.parse(localStorage.getItem('toWatch')).includes(id);
   }
 
   /**
@@ -103,5 +101,4 @@ export class LibraryService {
     this.storageToWatch = toWatch || [];
     this.toWatchListChange.next(this.storageToWatch);
   }
-
 }

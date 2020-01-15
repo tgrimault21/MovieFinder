@@ -30,9 +30,3 @@
   display: flex;
   width: 120px;
 }
-
-.cards-list {
-  display:flex;
-  flex-wrap:wrap;
-  justify-content: center;
-}

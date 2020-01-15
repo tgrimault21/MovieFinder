@@ -1,17 +1,27 @@
 import { Injectable, Inject } from '@angular/core';
 import { Observable, pipe } from 'rxjs';
 
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { TheMovieDbService } from '../themoviedb/themoviedb.service';
 
 export interface Movie {
-    title: string,
-    genre_ids?: number[],
-    runtime: number,
-    release_date: string,
-    id: number,
-    poster_path: string,
-    overview: string
+    title?: string;
+    genre_ids?: number[];
+    runtime?: number;
+    release_date?: string;
+    id: number;
+    poster_path?: string;
+    overview?: string;
+    cast?: Cast[];
+    crew?: Crew[];
+}
+
+export interface Cast {
+  name: string;
+}
+
+export interface Crew {
+  department: string;
 }
 
 export type Movies = Movie[];
@@ -51,5 +61,16 @@ export class MovieService {
           overview: res.overview
         };
       }));
+  }
+
+  public fetchCredits(id: number): Observable<Movie> {
+    return this.themoviedb.get<Movie>('/movie/' + id + '/credits')
+    .pipe(map(res => {
+      return {
+        cast: res.cast,
+        crew: res.crew,
+        id: res.id
+      };
+    }));
   }
 }

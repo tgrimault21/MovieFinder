@@ -4,7 +4,7 @@
   </mat-toolbar-row>
 
   <mat-toolbar-row class="row-form">
-    <form class="form-search" #search="ngForm" (ngSubmit)="movieResearch(search)">
+    <form class="form-search" #search="ngForm" (ngSubmit)="submitForm(search)">
       <mat-form-field class="movie-search">
         <input matInput placeholder="Search for a movie" [(ngModel)]="name" name="searchMovie" required>
       </mat-form-field>
@@ -24,35 +24,19 @@
     </form>
   </mat-toolbar-row>
 </mat-toolbar>
-<mat-tab-group>
-  <mat-tab label="Movies List">
-    <div *ngIf="dataMovie" class="cards-list">
-      <ng-container *ngFor="let result of dataMovie ; let i = index">
-        <mat-card>
-          <mat-card-header>
-            <mat-card-title>{{ result?.title }}</mat-card-title>
-            <mat-button-toggle-group name="save" aria-label="Save Movie" multiple>
-              <mat-button-toggle matTooltip="Add to Watched list" mat-icon-button aria-label="watched button" [checked]="isWatched(result?.id)" (change)="addWatched(result?.id, watchedlist)">
-                <mat-icon>check</mat-icon>
-              </mat-button-toggle>
-              <mat-button-toggle matTooltip="Add to To Watch list" mat-icon-button aria-label="to watch button" [checked]="isToWatch(result?.id)" (change)="addToWatch(result?.id, towatchlist)">
-                <mat-icon>remove_red_eye</mat-icon>
-              </mat-button-toggle>
-            </mat-button-toggle-group>
-          </mat-card-header>
-          <img mat-card-image [src]="'http://image.tmdb.org/t/p/w185' + result.poster_path" alt="Poster image">
-          <mat-card-content>
-            <p *ngIf="result?.release_date">Release date : {{ result?.release_date }}</p>
-            <p *ngIf="result?.runtime">Duration : {{ dataMovie[i]?.runtime }} minutes</p>
-          </mat-card-content>
-          <mat-card-actions>
-            <button mat-stroked-button (click)="openDialog(result)">More details</button>
-          </mat-card-actions>
-        </mat-card>
-      </ng-container>
-    </div>
-   </mat-tab>
-
-  <mat-tab label="Watched Movies"> <app-watchedlist #watchedlist></app-watchedlist> </mat-tab>
-  <mat-tab label="Movies to watch"> <app-towatchlist #towatchlist></app-towatchlist> </mat-tab>
-</mat-tab-group>
+<nav mat-tab-nav-bar>
+  <a mat-tab-link
+    routerLink=""
+    routerLinkActive #rla1="routerLinkActive"
+    [active]="rla1.isActive">
+    Movies List
+  </a>
+  <a mat-tab-link
+     *ngFor="let link of navLinks"
+     [routerLink]="link.path"
+     routerLinkActive #rla="routerLinkActive"
+     [active]="rla.isActive">
+    {{link.label}}
+  </a>
+</nav>
+<router-outlet></router-outlet>

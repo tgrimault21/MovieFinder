@@ -1,0 +1,5 @@
+<div *ngIf="dataMovie$ | async as dataMovies" class="cards-list">
+  <ng-container *ngFor="let result of dataMovies">
+    <app-movie [movie]="result"></app-movie>
+  </ng-container>
+</div>
