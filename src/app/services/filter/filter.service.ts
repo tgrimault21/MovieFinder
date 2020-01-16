@@ -1,15 +1,22 @@
 import { Injectable } from '@angular/core';
 import { Movie, Movies, Response, MovieService } from '../movie/movie.service';
-import { map, switchMap } from 'rxjs/operators';
 import { Observable, forkJoin, of, Subject, BehaviorSubject } from 'rxjs';
-import { NgForm } from '@angular/forms';
-import { Genre } from '../genre/genre.service';
+import { Genre, Genres } from '../genre/genre.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { map } from 'rxjs/operators';
 
 export interface Filters {
   text?: string;
-  genre?: Genre[];
+  genre?: number[];
   releasedAfter?: number;
   releasedBefore?: number;
+}
+
+export interface FiltersEncoded {
+  text: string;
+  genre: string;
+  releasedAfter: number;
+  releasedBefore: number;
 }
 
 @Injectable({
@@ -17,15 +24,22 @@ export interface Filters {
 })
 export class FilterService {
 
-  private genreIDs: number[] = [];
   private moviesAfterGenreFilter: Movies = [];
 
   public sendNewForm = new BehaviorSubject<Filters>({});
+  public route: ActivatedRoute;
 
   constructor(
-    private movie: MovieService
+    private movie: MovieService,
+    private router: Router
   ) {}
 
+  /**
+   * Apply genre and date filters
+   * @param res movies searched with name query
+   * @param form form submited
+   * @returns array of ids of movies filtered
+   */
   public filterMovies(res: Response<Movie>, form: Filters): number[] {
     if (form.genre && form.genre.length !== 0) {
       this.filterMoviesByGenre(form.genre, res);
@@ -108,17 +122,27 @@ export class FilterService {
    * @param filterGenres genres checked in the form
    * @param res response from the API
    */
-  private filterMoviesByGenre(filterGenres: any[], res: Response<Movie>) {
-    // push the ids of each genre selected in an array
-    this.genreIDs = filterGenres.map(genre => genre.id);
-
+  private filterMoviesByGenre(filterGenres: number[], res: Response<Movie>) {
     // Only keep movies where at least one of the genres associated with is selected in the filter
     this.moviesAfterGenreFilter = res.results.filter(movie => {
-      return movie.genre_ids.some(id => this.genreIDs.includes(id));
+      return movie.genre_ids.some(id => filterGenres.includes(id));
     });
   }
 
   public sendForm(search: Filters) {
-    this.sendNewForm.next(search);
+    const genresEncoded = btoa(search.genre.toString());
+    // tslint:disable-next-line: max-line-length
+    this.router.navigate(['/list'], {queryParams: {movie: search.text, genres: genresEncoded, releasedafter: search.releasedAfter, releasedbefore: search.releasedBefore}});
+  }
+
+  public filters$(route: ActivatedRoute): Observable<FiltersEncoded> {
+    return route.queryParams.pipe(map(params => {
+      return {
+        text: params.movie,
+        genre: params.genres,
+        releasedAfter: +params.releasedafter,
+        releasedBefore: +params.releasedbefore
+      };
+    }));
   }
 }

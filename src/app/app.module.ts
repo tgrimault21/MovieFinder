@@ -21,14 +21,7 @@ import { WatchedlistComponent } from './components/watchedlist/watchedlist.compo
 import { TowatchlistComponent } from './components/towatchlist/towatchlist.component';
 import { API_BASE_URL, API_KEY } from './services/tokens';
 import { MovieComponent } from './components/movie/movie.component';
-import { RouterModule, Routes } from '@angular/router';
 import { MoviesComponent } from './components/movies/movies.component';
-
-const appRoutes: Routes = [
-  { path: '', component: MoviesComponent },
-  { path: 'to-watch', component: TowatchlistComponent },
-  { path: 'watched', component: WatchedlistComponent }
-];
 
 @NgModule({
   declarations: [
@@ -56,10 +49,7 @@ const appRoutes: Routes = [
     MatButtonToggleModule,
     MatToolbarModule,
     MatTabsModule,
-    MatTooltipModule,
-    RouterModule.forRoot(
-      appRoutes
-    )
+    MatTooltipModule
   ],
   providers: [
     { provide: API_BASE_URL, useValue: 'https://api.themoviedb.org/3' },
