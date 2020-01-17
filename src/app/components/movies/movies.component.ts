@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { Movies, MovieService } from 'src/app/services/movie/movie.service';
-import { Observable, EMPTY, merge, of } from 'rxjs';
-import { map, switchMap, partition, filter, tap } from 'rxjs/operators';
-import { FilterService, Filters, FiltersEncoded } from 'src/app/services/filter/filter.service';
+import { Observable, EMPTY, merge, of, forkJoin } from 'rxjs';
+import { map, switchMap, filter } from 'rxjs/operators';
+import { FilterService, Filters } from 'src/app/services/filter/filter.service';
 import { Genre } from 'src/app/services/genre/genre.service';
 
 @Component({
@@ -17,15 +16,14 @@ export class MoviesComponent implements OnInit {
   private nbDisplay = 10;
 
   constructor(
-    private route: ActivatedRoute,
     private movie: MovieService,
     private filterService: FilterService
   ) { }
 
-  ngOnInit() {
+  public ngOnInit() {
     const split$ = [
-      this.filterService.filters$(this.route).pipe(filter(filters => (filters.text || '').length === 0)),
-      this.filterService.filters$(this.route).pipe(filter(filters => (filters.text || '').length > 0)),
+      this.filterService.filterChange.pipe(filter(filters => (filters.text || '').length === 0)),
+      this.filterService.filterChange.pipe(filter(filters => (filters.text || '').length > 0)),
     ];
 
     this.dataMovie$ = merge(
@@ -38,39 +36,50 @@ export class MoviesComponent implements OnInit {
    * Called when the form is submited
    * @param search the form
    */
-  public movieResearch(searchEncoded: FiltersEncoded): Observable<Movies> {
-    let search: Filters;
+  private movieResearch(searchEncoded: Filters): Observable<Movies> {
     if (!searchEncoded.text) {
       return EMPTY;
     }
-    console.log('tap5', searchEncoded)
-
-    search = {
-      text: searchEncoded.text,
-      genre: atob(searchEncoded.genre).split[','],
-      releasedAfter: searchEncoded.releasedAfter,
-      releasedBefore: searchEncoded.releasedBefore
-    };
 
     // This will search through the database based on the 'name of the movie' input, and then we apply filters on the result
-    const movieListSearch$ = this.movie.search(search.text);
-    return movieListSearch$.pipe(map(res => {
-        return this.filterService.filterMovies(res, search);
-      }),
-      switchMap(res => this.filterService.extraction(res, this.nbDisplay))
+    const movieListSearch$ = this.movie.search(searchEncoded.text);
+    return movieListSearch$.pipe(
+      map(res => this.filterService.filterMovies(res, searchEncoded)),
+      switchMap(res => this.extraction(res, this.nbDisplay))
     );
   }
 
   /**
    * Show the list of top popular movies by default
    */
-  public getPopularMovies(): Observable<Movies> {
+  private getPopularMovies(): Observable<Movies> {
     return this.movie.listPopular()
       .pipe(
-        map(res => {
-          return this.filterService.takeIdOutOfMovies(res.results);
-        }),
-        switchMap(res => this.filterService.extraction(res, this.nbDisplay))
+        map(res => this.filterService.takeIdOutOfMovies(res.results)),
+        switchMap(res => this.extraction(res, this.nbDisplay))
+    );
+  }
+
+  /**
+   * Only 10 movies will be displayed on the screen
+   * @param movies list of movie ids
+   * @param nbDisplay number of movies to display on screen
+   */
+  public extraction(movies: number[], nbDisplay: number): Observable<Movies> {
+    return this.getMovieDetails(movies.splice(0, nbDisplay));
+  }
+
+  /**
+   * Put details of every movie shown on the screen in an array
+   * @param movies list of 10 ids
+   */
+  private getMovieDetails(movies: number[]): Observable<Movies> {
+    if (movies.length === 0) {
+      return of([]);
+    }
+
+    return forkJoin(
+      movies.map( movieId => this.movie.fetch(movieId))
     );
   }
 }

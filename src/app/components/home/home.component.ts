@@ -4,7 +4,6 @@ import { GenreService, Genres, Genre } from 'src/app/services/genre/genre.servic
 import { MovieService, Movie, Movies } from 'src/app/services/movie/movie.service';
 import { Observable, EMPTY, of, forkJoin } from 'rxjs';
 import { map, switchMap, tap, takeLast, filter } from 'rxjs/operators';
-import { RouterModule, Routes, ActivatedRoute, Router, Scroll } from '@angular/router';
 import { FilterService } from 'src/app/services/filter/filter.service';
 
 export interface Nav {
@@ -23,40 +22,33 @@ export class HomeComponent implements OnInit {
   public filterReleasedAfter = '1900';
   public filterReleasedBefore = '2020';
   public genres = [{id: 28, name: 'Action'}];
-  public filters$: Observable<Observable<{name: string, genres: Observable<Genres>}>>;
+  public filters$: Observable<{name: string, genres: Genres}>;
   public navLinks: Nav[] = [];
   public isFetched = false;
 
   constructor(
     private genre: GenreService,
-    private filterService: FilterService,
-    private route: ActivatedRoute,
-    private router: Router
+    private filterService: FilterService
   ) {}
 
   public ngOnInit() {
-    this.genresList$ = this.genre.list();
     this.setRoutes();
-    const changeRoute = this.router.events.pipe(
-      filter(events => events instanceof Scroll),
-      map((res: Scroll)  => {
-        if (res.routerEvent.url.includes('/list')) {
-          return this.filterService.filters$(this.route);
-        }
+
+    this.genresList$ = this.genre.list();
+    this.filters$ = this.filterService.filterChange.pipe(
+      switchMap(filters => {
+        return this.genresList$
+          .pipe(
+            map(genres => {
+            return {
+              name: filters.text,
+              genres: genres.filter(genreTemp => filters.genre.includes(genreTemp.id)),
+            };
+          }),
+          tap(res => console.log('oui',res)));
       })
     );
-    this.filters$ = changeRoute.pipe(map(res => {
-      return res.pipe(map(filtersEncoded => {
-        const tempGenres = atob(filtersEncoded.genre).split[','];
-        const genres$ = this.genresList$.pipe(map(genres => genres.filter(genre => {
-          return tempGenres.includes(genre.id);
-        })));
-        return {
-          name: filtersEncoded.text,
-          genres: genres$
-        };
-      }));
-    }));
+    this.filters$.subscribe(ok => console.log('zfze',ok))
   }
 
   /**

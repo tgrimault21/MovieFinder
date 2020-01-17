@@ -1,22 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Movie, Movies, Response, MovieService } from '../movie/movie.service';
-import { Observable, forkJoin, of, Subject, BehaviorSubject } from 'rxjs';
-import { Genre, Genres } from '../genre/genre.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import { map } from 'rxjs/operators';
+import { Observable, forkJoin, of, Subject, BehaviorSubject, EMPTY, throwError } from 'rxjs';
+import { Genre, Genres, GenreService } from '../genre/genre.service';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { map, filter, switchMap, startWith, tap, catchError } from 'rxjs/operators';
 
 export interface Filters {
   text?: string;
   genre?: number[];
   releasedAfter?: number;
   releasedBefore?: number;
-}
-
-export interface FiltersEncoded {
-  text: string;
-  genre: string;
-  releasedAfter: number;
-  releasedBefore: number;
 }
 
 @Injectable({
@@ -26,13 +19,27 @@ export class FilterService {
 
   private moviesAfterGenreFilter: Movies = [];
 
-  public sendNewForm = new BehaviorSubject<Filters>({});
-  public route: ActivatedRoute;
+  public filterChange: Observable<Filters>;
 
   constructor(
     private movie: MovieService,
-    private router: Router
-  ) {}
+    private router: Router,
+    activatedRoute: ActivatedRoute
+  ) {
+    this.filterChange = activatedRoute.queryParams
+      .pipe(
+        startWith({movie: '', genres: '', releasedafter: null, releasedbefore: null}),
+        map(params => {
+          return {
+            text: params.movie,
+            genre: this.decryptGenres(params.genres),
+            releasedAfter: +params.releasedafter,
+            releasedBefore: +params.releasedbefore
+          };
+        }),
+        tap(error => console.log('error',error))
+      );
+  }
 
   /**
    * Apply genre and date filters
@@ -59,26 +66,12 @@ export class FilterService {
   }
 
   /**
-   * Only 10 movies will be displayed on the screen
-   * @param movies list of movie ids
-   * @param nbDisplay number of movies to display on screen
+   * Take ids out of movies sent
+   * @param movies movies you want to take ids from
+   * @returns array of movie ids
    */
-  public extraction(movies: number[], nbDisplay: number): Observable<Movies> {
-    return this.getMovieDetails(movies.splice(0, nbDisplay));
-  }
-
-  /**
-   * Put details of every movie shown on the screen in an array
-   * @param movies list of 10 ids
-   */
-  private getMovieDetails(movies: number[]): Observable<Movies> {
-    if (movies.length === 0) {
-      return of([]);
-    }
-
-    return forkJoin(
-      movies.map( movieId => this.movie.fetch(movieId))
-    );
+  public takeIdOutOfMovies(movies: Movies): number[] {
+    return movies.map(res => res.id);
   }
 
  /**
@@ -99,13 +92,10 @@ export class FilterService {
    this.moviesAfterGenreFilter = res.filter(movie => this.getYear(movie.release_date) < filterYear);
  }
 
- /**
-  * Take ids out of movies sent
-  * @param movies movies you want to take ids from
-  * @returns array of movie ids
-  */
- public takeIdOutOfMovies(movies: Movies): number[] {
-   return movies.map(res => res.id);
+ public sendForm(search: Filters) {
+   const genresEncoded = btoa(search.genre.toString());
+   // tslint:disable-next-line: max-line-length
+   this.router.navigate(['/list'], {queryParams: {movie: search.text, genres: genresEncoded, releasedafter: search.releasedAfter, releasedbefore: search.releasedBefore}});
  }
 
   /**
@@ -129,20 +119,12 @@ export class FilterService {
     });
   }
 
-  public sendForm(search: Filters) {
-    const genresEncoded = btoa(search.genre.toString());
-    // tslint:disable-next-line: max-line-length
-    this.router.navigate(['/list'], {queryParams: {movie: search.text, genres: genresEncoded, releasedafter: search.releasedAfter, releasedbefore: search.releasedBefore}});
-  }
-
-  public filters$(route: ActivatedRoute): Observable<FiltersEncoded> {
-    return route.queryParams.pipe(map(params => {
-      return {
-        text: params.movie,
-        genre: params.genres,
-        releasedAfter: +params.releasedafter,
-        releasedBefore: +params.releasedbefore
-      };
-    }));
+  private decryptGenres(genresEncoded: string): number[] {
+    if (genresEncoded === '') {
+      return [];
+    }
+    const stringIds = atob(genresEncoded).split(',');
+    const numberIds = stringIds.map(id => +id);
+    return numberIds;
   }
 }

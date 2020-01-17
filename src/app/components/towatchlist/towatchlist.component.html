@@ -6,8 +6,9 @@
       </mat-card-header>
       <img mat-card-image [src]="'http://image.tmdb.org/t/p/w185' + result.poster_path" alt="Poster image">
       <mat-card-content>
-        <p *ngIf="result?.release_date">Release date : {{ result?.release_date }}</p>
-        <p *ngIf="result?.runtime">Duration : {{ result?.runtime }} minutes</p>
+        <p *ngIf="result?.release_date">Release date: {{ result?.release_date }}</p>
+        <p *ngIf="result?.runtime">
+          <ng-container i18n="@@to-watchlist.duration">Duration:</ng-container> {{ result?.runtime }} minutes</p>
       </mat-card-content>
     </mat-card>
   </ng-container>

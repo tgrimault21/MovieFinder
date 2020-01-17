@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 import { TheMovieDbService } from '../themoviedb/themoviedb.service';
 
 export interface Genre {
-  id: string;
+  id: number;
   name: string;
 }
 

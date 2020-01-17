@@ -12,8 +12,8 @@
     </mat-card-header>
     <img mat-card-image [src]="'http://image.tmdb.org/t/p/w185' + movie.poster_path" alt="Poster image">
     <mat-card-content>
-      <p *ngIf="movie?.release_date">Release date : {{ movie?.release_date }}</p>
-      <p *ngIf="movie?.runtime">Duration : {{ movie?.runtime }} minutes</p>
+      <p *ngIf="movie?.release_date">Release date: {{ movie?.release_date }}</p>
+      <p *ngIf="movie?.runtime">Duration: {{ movie?.runtime }} minutes</p>
     </mat-card-content>
     <mat-card-actions>
       <button mat-stroked-button (click)="openDialog(movie)">More details</button>

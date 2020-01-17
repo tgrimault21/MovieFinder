@@ -4,23 +4,23 @@
   </mat-toolbar-row>
 
   <mat-toolbar-row class="row-form">
-    <form class="form-search" #search="ngForm" (ngSubmit)="submitForm(search)">
+    <form class="form-search" #search="ngForm" (ngSubmit)="submitForm(search)" *ngIf="filters$ | async as filters">
       <mat-form-field class="movie-search">
-        <input matInput placeholder="Search for a movie" [(ngModel)]="name" name="searchMovie" required>
+        <input matInput placeholder="Search for a movie" [(ngModel)]="filters.name" name="searchMovie" required>
       </mat-form-field>
-      <mat-form-field class="field genre-filter" *ngIf="name">
+      <mat-form-field class="field genre-filter" *ngIf="filters.name">
         <mat-label>Genres selection</mat-label>
-        <mat-select [(ngModel)]="filter1" name="filterGenres" multiple>
+        <mat-select [(ngModel)]="filters.genres" name="filterGenres" multiple>
           <mat-option *ngFor="let genre of genresList$ | async" [value]="genre">{{genre.name}}</mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field class="field year-filter" *ngIf="name">
+      <mat-form-field class="field year-filter" *ngIf="filters.name">
         <input matInput type="number" placeholder="Movie released after..." [(ngModel)]="filterReleasedAfter" name="filterYearAfter">
       </mat-form-field>
-      <mat-form-field class="field year-filter" *ngIf="name">
+      <mat-form-field class="field year-filter" *ngIf="filters.name">
         <input matInput type="number" placeholder="Movie released before..." [(ngModel)]="filterReleasedBefore" name="filterYearBefore">
       </mat-form-field>
-      <button mat-stroked-button [disabled]="name && name != '' ? false : true" class="button-form">Search</button>
+      <button mat-stroked-button [disabled]="filters.name && filters.name != '' ? false : true" class="button-form">Search</button>
     </form>
   </mat-toolbar-row>
 </mat-toolbar>
