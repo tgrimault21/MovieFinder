@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { GenreService, Genres, Genre } from 'src/app/services/genre/genre.service';
-import { MovieService, Movie, Movies } from 'src/app/services/movie/movie.service';
-import { Observable, EMPTY, of, forkJoin } from 'rxjs';
-import { map, switchMap, tap, takeLast, filter } from 'rxjs/operators';
-import { FilterService } from 'src/app/services/filter/filter.service';
+import { GenreService, Genres, Genre } from 'src/app/shared/services/genre/genre.service';
+import { Movie } from 'src/app/shared/services/movie/movie.service';
+import { Observable } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs/operators';
+import { FilterService } from 'src/app/shared/services/filter/filter.service';
 
 export interface Nav {
   label: string;
@@ -23,7 +23,6 @@ export class HomeComponent implements OnInit {
   public filterReleasedBefore = '2020';
   public genres = [{id: 28, name: 'Action'}];
   public filters$: Observable<{name: string, genres: Genres}>;
-  public navLinks: Nav[] = [];
   public isFetched = false;
 
   constructor(
@@ -32,8 +31,6 @@ export class HomeComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
-    this.setRoutes();
-
     this.genresList$ = this.genre.list();
     this.filters$ = this.filterService.filterChange.pipe(
       switchMap(filters => {
@@ -44,11 +41,9 @@ export class HomeComponent implements OnInit {
               name: filters.text,
               genres: genres.filter(genreTemp => filters.genre.includes(genreTemp.id)),
             };
-          }),
-          tap(res => console.log('oui',res)));
+          }));
       })
     );
-    this.filters$.subscribe(ok => console.log('zfze',ok))
   }
 
   /**
@@ -59,20 +54,10 @@ export class HomeComponent implements OnInit {
     console.log(message, data);
   }
 
-  private setRoutes() {
-    const watched: Nav = {
-      label: 'Watched Movies',
-      path: '/watched'
-    };
-
-    const toWatch: Nav = {
-      label: 'Movies to watch',
-      path: '/to-watch'
-    };
-
-    this.navLinks.push(watched, toWatch);
-  }
-
+  /**
+   * Submit form
+   * @param search the whole form
+   */
   public submitForm(search: NgForm) {
     const form = search.form.value;
     let filterGenres = [];

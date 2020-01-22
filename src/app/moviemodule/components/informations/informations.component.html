@@ -1,0 +1,28 @@
+<h1 mat-dialog-title>{{data?.title}}</h1>
+<div mat-dialog-content>
+  <div *ngIf="director$ | async as directors">
+    <ng-container *ngIf="directors.length == 1; else multipleDirectors">
+      <p>
+        <b><ng-container i18n="@@informations.director">Director</ng-container></b>: {{ directors[0].name }}
+      </p>
+    </ng-container>
+    <ng-template #multipleDirectors>
+      <p>
+        <b><ng-container i18n="@@informations.directors">Directors</ng-container></b>:
+      </p>
+      <ul *ngFor="let director of directors">
+        <li>{{director.name}}</li>
+      </ul>
+    </ng-template>
+  </div>
+  <div *ngIf="actors$ | async as actors">
+    <p><b><ng-container i18n="@@informations.actors">Major actors</ng-container></b>:</p>
+    <ul *ngFor="let actor of actors">
+      <li>{{actor.name}}</li>
+    </ul>
+  </div>
+  <p><b>Synopsis</b> : {{data?.overview}}
+</div>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="" cdkFocusInitial><ng-container i18n="@@informations.close">Close</ng-container></button>
+</div>

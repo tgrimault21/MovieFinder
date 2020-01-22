@@ -58,6 +58,15 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "fr": {
+              "aot": true,
+              "outputPath": "dist/MovieFinder",
+              "baseHref": "/fr/",
+              "i18nFile": "src/locale/fr.xlf",
+              "i18nFormat": "xlf",
+              "i18nLocale": "fr",
+              "i18nMissingTranslation": "error"
             }
           }
         },
@@ -69,6 +78,9 @@
           "configurations": {
             "production": {
               "browserTarget": "MovieFinder:build:production"
+            },
+            "fr": {
+              "browserTarget": "MovieFinder:build:fr"
             }
           }
         },

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="home.namePlaceholder" datatype="html">
+        <source>Search for a movie</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/home/home.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="home.genres" datatype="html">
+        <source>Genres selection</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/home/home.component.html</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="home.afterPlaceholder" datatype="html">
+        <source>Movie released after...</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/home/home.component.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="home.beforePlaceholder" datatype="html">
+        <source>Movie released before...</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/home/home.component.html</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="home.search" datatype="html">
+        <source>Search</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/home/home.component.html</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="home.moviesList" datatype="html">
+        <source>Movies List</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/home/home.component.html</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="home.watchedList" datatype="html">
+        <source>Watched Movies</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/home/home.component.html</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="home.towatchList" datatype="html">
+        <source>Movies to watch</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/home/home.component.html</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="informations.director" datatype="html">
+        <source>Director</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/informations/informations.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="informations.directors" datatype="html">
+        <source>Directors</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/informations/informations.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="informations.actors" datatype="html">
+        <source>Major actors</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/informations/informations.component.html</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="informations.close" datatype="html">
+        <source>Close</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/informations/informations.component.html</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="watchedlist.releaseDate" datatype="html">
+        <source>Release date:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/watchedlist/watchedlist.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="watchedlist.duration" datatype="html">
+        <source>Duration:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/watchedlist/watchedlist.component.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="to-watchlist.releaseDate" datatype="html">
+        <source>Release date:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/towatchlist/towatchlist.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="to-watchlist.duration" datatype="html">
+        <source>Duration:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/towatchlist/towatchlist.component.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="movie.releaseDate" datatype="html">
+        <source>Release date:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/movie/movie.component.html</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="movie.duration" datatype="html">
+        <source>Duration:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/movie/movie.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="movie.moreDetails" datatype="html">
+        <source>More details</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/movie/movie.component.html</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

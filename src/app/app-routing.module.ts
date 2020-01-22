@@ -1,15 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { MoviesComponent } from './components/movies/movies.component';
-import { TowatchlistComponent } from './components/towatchlist/towatchlist.component';
-import { WatchedlistComponent } from './components/watchedlist/watchedlist.component';
 
 
 const routes: Routes = [
-  { path: 'list', component: MoviesComponent },
   { path: '',   redirectTo: '/list', pathMatch: 'full' },
-  { path: 'to-watch', component: TowatchlistComponent },
-  { path: 'watched', component: WatchedlistComponent }
+  { path: 'watched', loadChildren: () => import('./watched/watched.module').then(m => m.WatchedModule) },
+  { path: 'to-watch', loadChildren: () => import('./to-watch/to-watch.module').then(m => m.ToWatchModule) },
+  { path: 'list', loadChildren: () => import('./moviemodule/moviemodule.module').then(m => m.MoviemoduleModule) }
 ];
 
 @NgModule({

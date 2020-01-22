@@ -6,21 +6,21 @@
   <mat-toolbar-row class="row-form">
     <form class="form-search" #search="ngForm" (ngSubmit)="submitForm(search)" *ngIf="filters$ | async as filters">
       <mat-form-field class="movie-search">
-        <input matInput placeholder="Search for a movie" [(ngModel)]="filters.name" name="searchMovie" required>
+        <input matInput placeholder="Search for a movie" i18n-placeholder="@@home.namePlaceholder" [(ngModel)]="filters.name" name="searchMovie" required>
       </mat-form-field>
       <mat-form-field class="field genre-filter" *ngIf="filters.name">
-        <mat-label>Genres selection</mat-label>
+        <mat-label><ng-container i18n="@@home.genres">Genres selection</ng-container></mat-label>
         <mat-select [(ngModel)]="filters.genres" name="filterGenres" multiple>
           <mat-option *ngFor="let genre of genresList$ | async" [value]="genre">{{genre.name}}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field class="field year-filter" *ngIf="filters.name">
-        <input matInput type="number" placeholder="Movie released after..." [(ngModel)]="filterReleasedAfter" name="filterYearAfter">
+        <input matInput type="number" placeholder="Movie released after..." i18n-placeholder="@@home.afterPlaceholder" [(ngModel)]="filterReleasedAfter" name="filterYearAfter">
       </mat-form-field>
       <mat-form-field class="field year-filter" *ngIf="filters.name">
-        <input matInput type="number" placeholder="Movie released before..." [(ngModel)]="filterReleasedBefore" name="filterYearBefore">
+        <input matInput type="number" placeholder="Movie released before..." i18n-placeholder="@@home.beforePlaceholder" [(ngModel)]="filterReleasedBefore" name="filterYearBefore">
       </mat-form-field>
-      <button mat-stroked-button [disabled]="filters.name && filters.name != '' ? false : true" class="button-form">Search</button>
+      <button mat-stroked-button [disabled]="filters.name && filters.name != '' ? false : true" class="button-form"><ng-container i18n="@@home.search">Search</ng-container></button>
     </form>
   </mat-toolbar-row>
 </mat-toolbar>
@@ -29,14 +29,19 @@
     routerLink="/list"
     routerLinkActive #rla1="routerLinkActive"
     [active]="rla1.isActive">
-    Movies List
+    <ng-container i18n="@@home.moviesList">Movies List</ng-container>
   </a>
   <a mat-tab-link
-     *ngFor="let link of navLinks"
-     [routerLink]="link.path"
-     routerLinkActive #rla="routerLinkActive"
-     [active]="rla.isActive">
-    {{link.label}}
+    routerLink="/watched"
+    routerLinkActive #rla1="routerLinkActive"
+    [active]="rla1.isActive">
+     <ng-container i18n="@@home.watchedList">Watched Movies</ng-container>
+  </a>
+  <a mat-tab-link
+    routerLink="/to-watch"
+    routerLinkActive #rla1="routerLinkActive"
+    [active]="rla1.isActive">
+     <ng-container i18n="@@home.towatchList">Movies to watch</ng-container>
   </a>
 </nav>
 <router-outlet></router-outlet>
