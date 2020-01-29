@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { LocalStorageService } from '../localStorage/localStorage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +11,10 @@ export class LibraryService {
 
   private storageWatched: number[] = [];
   private storageToWatch: number[] = [];
+
+  constructor(
+    private localStorage: LocalStorageService
+  ) {}
 
   /**
    * Add or remove a movie of watched list when we click on a toggle button
@@ -23,7 +28,7 @@ export class LibraryService {
       const index = this.storageWatched.indexOf(id);
       this.storageWatched.splice(index, 1);
     }
-    localStorage.setItem('watched', JSON.stringify(this.storageWatched));
+    this.localStorage.setItem('watched', JSON.stringify(this.storageWatched));
 
 
     // put the movie in the watched list to display on 'Watched movies' tab
@@ -43,7 +48,7 @@ export class LibraryService {
       this.storageToWatch.splice(index, 1);
     }
 
-    localStorage.setItem('toWatch', JSON.stringify(this.storageToWatch));
+    this.localStorage.setItem('toWatch', JSON.stringify(this.storageToWatch));
     // put the movie in the watched list to display on 'Movies To Watch' tab
     this.toWatchListChange.next(this.storageToWatch);
   }
@@ -54,7 +59,7 @@ export class LibraryService {
    * @returns true if the media is watched by the user
    */
   public isWatched(id: number): boolean {
-    return JSON.parse(localStorage.getItem('watched')) && JSON.parse(localStorage.getItem('watched')).includes(id);
+    return JSON.parse(this.localStorage.getItem('watched')) && JSON.parse(this.localStorage.getItem('watched')).includes(id);
   }
 
   /**
@@ -63,7 +68,7 @@ export class LibraryService {
    * @returns true if the media is watched by the user
    */
   public isToWatch(id: number): boolean {
-    return JSON.parse(localStorage.getItem('toWatch')) && JSON.parse(localStorage.getItem('toWatch')).includes(id);
+    return JSON.parse(this.localStorage.getItem('toWatch')) && JSON.parse(this.localStorage.getItem('toWatch')).includes(id);
   }
 
   /**
@@ -71,9 +76,9 @@ export class LibraryService {
    */
   public loadWatched() {
     let watched: number[] = [];
-
+    const data = this.localStorage.getItem('watched');
     try {
-      watched = JSON.parse(localStorage.getItem('watched'));
+      watched = JSON.parse(data);
     } catch (e) {}
 
     this.storageWatched = watched || [];
@@ -87,7 +92,7 @@ export class LibraryService {
     let toWatch: number[] = [];
 
     try {
-      toWatch = JSON.parse(localStorage.getItem('toWatch'));
+      toWatch = JSON.parse(this.localStorage.getItem('toWatch'));
     } catch (e) {}
 
     this.storageToWatch = toWatch || [];

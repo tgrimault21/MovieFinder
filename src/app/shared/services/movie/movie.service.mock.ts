@@ -1,8 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-
-import { map } from 'rxjs/operators';
-import { TheMovieDbService } from '../themoviedb/themoviedb.service';
+import { Observable, of } from 'rxjs';
 
 export interface Movie {
     title?: string;
@@ -36,9 +33,8 @@ export interface Response<T> {
 @Injectable({
   providedIn: 'root'
 })
-export class MovieService {
+export class MockMovieService {
   constructor(
-    private themoviedb: TheMovieDbService
   ) {}
 
   /**
@@ -46,7 +42,7 @@ export class MovieService {
    * @returns observable of movies not extracted from response
    */
   public listPopular(): Observable<Response<Movie>> {
-    return this.themoviedb.get<Response<Movie>>('/movie/popular');
+    return of(undefined);
   }
 
   /**
@@ -55,7 +51,7 @@ export class MovieService {
    * @returns observable of movies not extracted from response
    */
   public search(query: string): Observable<Response<Movie>> {
-    return this.themoviedb.get<Response<Movie>>('/search/movie', '&include_adult=false', '&query=' + query);
+    return of(undefined);
   }
 
   /**
@@ -64,17 +60,7 @@ export class MovieService {
    * @returns observable of movie details
    */
   public fetch(id: number): Observable<Movie> {
-    return this.themoviedb.get<Movie>('/movie/' + id)
-      .pipe(map(res => {
-        return {
-          title: res.title,
-          runtime: res.runtime,
-          release_date: res.release_date,
-          id: res.id,
-          poster_path: res.poster_path,
-          overview: res.overview
-        };
-      }));
+    return of(undefined);
   }
 
   /**
@@ -83,13 +69,6 @@ export class MovieService {
    * @returns observable of movie credits
    */
   public fetchCredits(id: number): Observable<Movie> {
-    return this.themoviedb.get<Movie>('/movie/' + id + '/credits')
-    .pipe(map(res => {
-      return {
-        cast: res.cast,
-        crew: res.crew,
-        id: res.id
-      };
-    }));
+    return of(undefined);
   }
 }

@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { GenreService, Genres, Genre } from 'src/app/shared/services/genre/genre.service';
-import { Movie } from 'src/app/shared/services/movie/movie.service';
 import { Observable } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
-import { FilterService } from 'src/app/shared/services/filter/filter.service';
+import { map } from 'rxjs/operators';
+import { FilterService, Filters } from 'src/app/shared/services/filter/filter.service';
 
 export interface Nav {
   label: string;
@@ -18,12 +17,11 @@ export interface Nav {
 })
 export class HomeComponent implements OnInit {
   public genresList$: Observable<Genres>;
-  public movieDetails$: Observable<Movie>;
   public filterReleasedAfter = '1900';
   public filterReleasedBefore = '2020';
-  public genres = [{id: 28, name: 'Action'}];
-  public filters$: Observable<{name: string, genres: Genres}>;
+  public filters$: Observable<{name: string}>;
   public isFetched = false;
+  public genres: Genres;
 
   constructor(
     private genre: GenreService,
@@ -33,49 +31,35 @@ export class HomeComponent implements OnInit {
   public ngOnInit() {
     this.genresList$ = this.genre.list();
     this.filters$ = this.filterService.filterChange.pipe(
-      switchMap(filters => {
-        return this.genresList$
-          .pipe(
-            map(genres => {
-            return {
-              name: filters.text,
-              genres: genres.filter(genreTemp => filters.genre.includes(genreTemp.id)),
-            };
-          }));
+      map(filters => {
+        return {
+          name: filters.text
+        };
       })
     );
-  }
-
-  /**
-   * To use when we want to test data in html
-   * @param data something to display
-   */
-  public console(message: string, data: any) {
-    console.log(message, data);
   }
 
   /**
    * Submit form
    * @param search the whole form
    */
-  public submitForm(search: NgForm) {
-    const form = search.form.value;
+  public submitForm(filters: {name: string}) {
     let filterGenres = [];
     // clear release date filters field when they aren't valid input
-    if (!form.filterYearAfter || form.filterYearAfter > '2019') {
+    if (!this.filterReleasedAfter || this.filterReleasedAfter > '2019') {
       this.filterReleasedAfter = null;
     }
-    if (!form.filterYearBefore || form.filterYearBefore > '2020' || form.filterYearBefore <= form.filterYearAfter) {
+    if (!this.filterReleasedBefore || this.filterReleasedBefore > '2020' || this.filterReleasedBefore <= this.filterReleasedAfter) {
       this.filterReleasedBefore = null;
     }
-    if (form.filterGenres) {
-      filterGenres = form.filterGenres.map((res: Genre) => res.id);
+    if (this.genres) {
+      filterGenres = this.genres.map((res: Genre) => res.id);
     }
     this.filterService.sendForm({
-      text: form.searchMovie,
+      text: filters.name,
       genre: filterGenres,
-      releasedAfter: form.filterYearAfter,
-      releasedBefore: form.filterYearBefore,
+      releasedAfter: +this.filterReleasedAfter,
+      releasedBefore: +this.filterReleasedBefore,
     });
   }
 }

@@ -34,10 +34,6 @@ export class MoviesComponent implements OnInit {
    * @param search the form
    */
   private movieResearch(searchEncoded: Filters): Observable<Movies> {
-    if (!searchEncoded.text) {
-      return EMPTY;
-    }
-
     // This will search through the database based on the 'name of the movie' input, and then we apply filters on the result
     const movieListSearch$ = this.movie.search(searchEncoded.text);
     return movieListSearch$.pipe(
@@ -52,8 +48,12 @@ export class MoviesComponent implements OnInit {
   private getPopularMovies(): Observable<Movies> {
     return this.movie.listPopular()
       .pipe(
-        tap(res => console.log('tap8', res)),
-        map(res => this.filterService.takeIdOutOfMovies(res.results)),
+        map(res => {
+          if (!res) {
+            return [];
+          }
+          return this.filterService.takeIdOutOfMovies(res.results);
+        }),
         switchMap(res => this.extraction(res, this.nbDisplay))
     );
   }
@@ -63,7 +63,7 @@ export class MoviesComponent implements OnInit {
    * @param movies list of movie ids
    * @param nbDisplay number of movies to display on screen
    */
-  public extraction(movies: number[], nbDisplay: number): Observable<Movies> {
+  private extraction(movies: number[], nbDisplay: number): Observable<Movies> {
     return this.getMovieDetails(movies.splice(0, nbDisplay));
   }
 

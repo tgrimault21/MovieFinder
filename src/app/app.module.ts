@@ -21,7 +21,7 @@ import { MoviemoduleModule } from './moviemodule/moviemodule.module';
     HomeComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,

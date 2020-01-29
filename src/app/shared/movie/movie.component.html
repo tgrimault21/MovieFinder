@@ -10,7 +10,7 @@
         </mat-button-toggle>
       </mat-button-toggle-group>
     </mat-card-header>
-    <img mat-card-image [src]="'http://image.tmdb.org/t/p/w185' + movie.poster_path" alt="Poster image">
+    <img mat-card-image [src]="'http://image.tmdb.org/t/p/w185' + movie?.poster_path" alt="Poster image">
     <mat-card-content>
       <p *ngIf="movie?.release_date"><ng-container i18n="@@movie.releaseDate">Release date:</ng-container> {{ movie?.release_date }}</p>
       <p *ngIf="movie?.runtime"><ng-container i18n="@@movie.duration">Duration:</ng-container> {{ movie?.runtime }} minutes</p>

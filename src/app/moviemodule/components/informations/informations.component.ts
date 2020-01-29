@@ -2,12 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Movie, MovieService } from 'src/app/shared/services/movie/movie.service';
-
-export interface DialogData {
-  animal: string;
-  name: string;
-}
+import { Movie, MovieService, Cast, Crew } from 'src/app/shared/services/movie/movie.service';
 
 @Component({
   selector: 'app-informations',
@@ -18,11 +13,11 @@ export class InformationsComponent implements OnInit {
   /**
    * @internal
    */
-  public director$: any;
+  public director$: Observable<Crew[]>;
   /**
    * @internal
    */
-  public actors$: any;
+  public actors$: Observable<Cast[]>;
   /**
    * @internal
    */
@@ -30,7 +25,7 @@ export class InformationsComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<InformationsComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) private data: any,
     private movie: MovieService
     ) {}
 
@@ -42,15 +37,11 @@ export class InformationsComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  public console(data: any) {
-    console.log(data);
-  }
-
   /**
    * Get the director and the top 5 actors of the movie we want more details on
    */
    private getCredits() {
-    if (!this.data) {
+    if (!this.data.id) {
       return;
     }
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Movie, Movies, Response, MovieService } from '../movie/movie.service';
+import { Movie, Movies, Response } from '../movie/movie.service';
 import { Observable } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/operators';
@@ -21,9 +21,8 @@ export class FilterService {
   public filterChange: Observable<Filters>;
 
   constructor(
-    private movie: MovieService,
     private router: Router,
-    activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute
   ) {
     this.filterChange = activatedRoute.queryParams
       .pipe(
@@ -98,7 +97,12 @@ export class FilterService {
  }
 
  public sendForm(search: Filters) {
-   const genresEncoded = btoa(search.genre.toString());
+   let genresEncoded: string;
+   if (search.genre) {
+     genresEncoded = btoa(search.genre.toString());
+   } else {
+     genresEncoded = '';
+   }
    // tslint:disable-next-line: max-line-length
    this.router.navigate(['/list'], {queryParams: {movie: search.text, genres: genresEncoded, releasedafter: search.releasedAfter, releasedbefore: search.releasedBefore}});
  }
