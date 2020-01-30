@@ -1,4 +1,8 @@
-<mat-card>
+<div class="movie-card">
+  <img class="movie-card_body" [src]="'http://image.tmdb.org/t/p/w185' + movie?.poster_path" alt="Poster image" (click)="openDialog(movie)">
+</div>
+
+<!-- <mat-card>
     <mat-card-header>
       <mat-card-title>{{ movie?.title }}</mat-card-title>
       <mat-button-toggle-group name="save" aria-label="Save Movie" multiple>
@@ -18,4 +22,4 @@
     <mat-card-actions>
       <button mat-stroked-button (click)="openDialog(movie)"><ng-container i18n="@@movie.moreDetails">More details</ng-container></button>
     </mat-card-actions>
-</mat-card>
+</mat-card> -->
