@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
 import { GenreService, Genres, Genre } from 'src/app/shared/services/genre/genre.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { FilterService, Filters } from 'src/app/shared/services/filter/filter.service';
+import { FilterService } from 'src/app/shared/services/filter/filter.service';
 
 export interface Nav {
   label: string;
@@ -17,8 +16,8 @@ export interface Nav {
 })
 export class HomeComponent implements OnInit {
   public genresList$: Observable<Genres>;
-  public filterReleasedAfter = '1900';
-  public filterReleasedBefore = '2020';
+  public filterReleasedAfter: string;
+  public filterReleasedBefore: string;
   public filters$: Observable<{name: string}>;
   public isFetched = false;
   public genres: Genres;

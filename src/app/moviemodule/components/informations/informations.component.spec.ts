@@ -19,7 +19,6 @@ function createModule(data: any = {id: 1}) {
     schemas: [ NO_ERRORS_SCHEMA ],
     providers: [
       { provide: MatDialogRef },
-      { provide: MAT_DIALOG_DATA },
       { provide: HttpClient, useValue: mockHttpClient },
       { provide: API_BASE_URL, useValue: 'https://api.themoviedb.org/3' },
       { provide: API_KEY, useValue: 'abc' },

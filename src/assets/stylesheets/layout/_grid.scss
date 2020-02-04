@@ -3,3 +3,13 @@
   flex-wrap:wrap;
   justify-content: center;
 }
+
+.main-body {
+  background-image: url('~src/assets/images/wp2665743@2x.png');
+  object-fit: cover;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  margin-top: 141px;
+  min-height: 100%;
+}

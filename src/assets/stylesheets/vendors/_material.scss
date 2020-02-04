@@ -1,0 +1,141 @@
+.mat-toolbar-single-row {
+  flex-direction: column !important;
+}
+
+.mat-form-field-outline-start {
+  width: 100px !important;
+  border-radius: 28px 0 0 28px !important;
+  border: 1px solid hsla(0, 0%, 43%, 1) !important;
+  border-right-style: none !important;
+}
+
+.mat-form-field-outline-end {
+  width: 100px !important;
+  border-radius: 0 28px 28px 0 !important;
+  border: 1px solid hsla(0, 0%, 43%, 1) !important;
+  border-left-style: none !important;
+}
+
+.mat-form-field-outline-gap {
+  border: 1px solid hsla(0, 0%, 43%, 1) !important;
+  border-left-style: none !important;
+  border-right-style: none !important;
+}
+
+.form_field .mat-form-field-flex {
+  height: 35px !important;
+  vertical-align: middle !important;
+}
+
+.form_field--search .mat-form-field-flex {
+  height: 48px !important;
+  vertical-align: middle !important;
+}
+
+.mat-form-field-infix {
+  border-top: none !important;
+  margin: auto 0;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-infix {
+  padding: 0.6em 0;
+}
+
+.form .mat-icon {
+  color: #25262B !important;
+  vertical-align: middle !important;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  top: 0 !important;
+  height: 100% !important;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-flex {
+  margin: 0 !important;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-label {
+  top: 27.5px !important;
+}
+
+.mat-form-field-appearance-outline .mat-select-arrow-wrapper {
+  transform: none !important;
+}
+
+.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+  transform: translateY(-23.5px) scale(.65) !important;
+}
+
+.form_field--search .mat-form-field-infix {
+  display: flex;
+  padding: 0;
+}
+
+.mat-select-panel {
+  border-radius: 10px !important;
+  background: #25262B !important;
+  border: 1px solid #A0A0A0 !important;
+}
+
+.mat-option {
+  height: 2em !important;
+  color: hsla(0, 0%, 100%, 1) !important;
+}
+
+.cdk-overlay-connected-position-bounding-box .cdk-overlay-pane {
+  transform: translateX(-12px) translateY(25px) !important;
+}
+
+.mat-primary .mat-pseudo-checkbox-checked {
+  background: hsla(0, 0%, 43%, 1) !important;
+}
+
+.mat-pseudo-checkbox {
+  border-color: hsla(0, 0%, 43%, 1) !important;
+}
+
+.mat-pseudo-checkbox::after {
+  color: #25262B !important;
+}
+
+.form_field--search .mat-input-element{
+  padding: 2px 0 0 8px;
+}
+
+.form_field--select {
+    &.mat-focused .mat-form-field-flex {
+    background: hsla(209, 57%, 86%, 1) !important;
+    border-radius: 28px !important;
+    color: #25262B !important;
+
+    .mat-select-arrow {
+      transform: rotate(180deg) !important;
+    }
+
+    .mat-form-field-label {
+      color: hsla(0, 0%, 100%, 1) !important;
+    }
+  }
+}
+
+.mat-tab-header {
+  background: none !important;
+  top: 113px;
+}
+
+.mat-icon {
+  font-family: "Material Icons" !important;
+}
+
+.mat-ink-bar {
+  display: none !important;
+}
+
+.button .mat-icon {
+  margin-right: 10px;
+}
+
+.mat-toolbar h1 {
+  font: inherit;
+}

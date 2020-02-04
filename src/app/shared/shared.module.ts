@@ -3,7 +3,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { API_BASE_URL, API_KEY } from './services/tokens';
 import { MovieComponent } from './movie/movie.component';
-import { MatCardModule, MatButtonToggleModule, MatTooltipModule, MatIconModule } from '@angular/material';
+import { MatCardModule, MatButtonToggleModule, MatTooltipModule } from '@angular/material';
 import { LocalStorageService } from './services/localStorage/localStorage.service';
 import { MockService } from './services/localStorage/mock.service';
 
@@ -23,8 +23,7 @@ export const loadLocalService = (platformId: string) => {
     MatButtonModule,
     MatCardModule,
     MatButtonToggleModule,
-    MatTooltipModule,
-    MatIconModule
+    MatTooltipModule
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

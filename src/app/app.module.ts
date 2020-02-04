@@ -13,6 +13,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { SharedModule } from './shared/shared.module';
 import { MoviemoduleModule } from './moviemodule/moviemodule.module';
+import { MatIconModule } from '@angular/material';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { MoviemoduleModule } from './moviemodule/moviemodule.module';
     MatToolbarModule,
     MatTabsModule,
     SharedModule,
-    MoviemoduleModule
+    MoviemoduleModule,
+    MatIconModule
   ],
   bootstrap: [AppComponent]
 })
