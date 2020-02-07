@@ -2,7 +2,9 @@
   <div class="top-movie_card">
     <app-toggle-buttons [movie]="movie" class="top-movie_toggle-buttons"></app-toggle-buttons>
     <div class="top-movie_card--click" (click)="openDialog(movie)">
-      <img class="top-movie_poster" [src]="'http://image.tmdb.org/t/p/w185' + movie?.poster_path" alt="Poster image"/>
+      <div class="top-movie_poster">
+        <img class="top-movie_poster--image" [src]="'http://image.tmdb.org/t/p/w185' + movie?.poster_path" alt="Poster image"/>
+      </div>
       <section class="top-movie_informations">
         <h1 class="top-movie_title">{{movie?.title}}</h1>
         <hr class="top-movie_break">

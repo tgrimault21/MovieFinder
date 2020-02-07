@@ -43,10 +43,16 @@
   }
 
   &_poster {
-    height: 384px;
     margin: 30px;
     margin-right: 56px;
     opacity: 1;
+    object-fit: cover;
+    width: 256px;
+    flex-shrink: 0;
+
+    &--image {
+      width: 100%;
+    }
   }
 
   &_description {

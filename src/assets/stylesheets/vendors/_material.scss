@@ -84,7 +84,7 @@
 }
 
 .cdk-overlay-connected-position-bounding-box .cdk-overlay-pane {
-  transform: translateX(-12px) translateY(25px) !important;
+  transform: translateX(-12px) translateY(85px) !important;
 }
 
 .mat-primary .mat-pseudo-checkbox-checked {
@@ -155,7 +155,7 @@
   color: white !important;
 }
 
-.cdk-overlay-pane {
+.cdk-global-overlay-wrapper .cdk-overlay-pane {
   width: 100% !important;
   height: 100% !important;
   position: relative !important;

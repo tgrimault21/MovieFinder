@@ -32,32 +32,4 @@ describe('MovieComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  describe('#ngOnChanges', () => {
-    it('should set isWatched and isToWatch to true', () => {
-      component.movie = {
-        id: 1,
-      };
-      spyOn(library, 'isWatched').and.returnValue(true);
-      spyOn(library, 'isToWatch').and.returnValue(true);
-      component.ngOnChanges();
-      expect(component.isWatched && component.isToWatch).toBeTruthy();
-    });
-  });
-
-  describe('#addWatched', () => {
-    it('should call toggleWatched', () => {
-      const watchedSpy = spyOn(library.watchedListChange, 'next');
-      component.addWatched(1);
-      expect(watchedSpy).toHaveBeenCalledWith([1]);
-    });
-  });
-
-  describe('#addToWatch', () => {
-    it('should call toggleToWatch', () => {
-      const toWatchSpy = spyOn(library.toWatchListChange, 'next');
-      component.addToWatch(2);
-      expect(toWatchSpy).toHaveBeenCalledWith([2]);
-    });
-  });
 });
