@@ -1,28 +1,38 @@
-<h1 mat-dialog-title>{{data?.title}}</h1>
-<div mat-dialog-content>
-  <div *ngIf="director$ | async as directors">
-    <ng-container *ngIf="directors.length == 1; else multipleDirectors">
-      <p>
-        <b><ng-container i18n="@@informations.director">Director</ng-container></b>: {{ directors[0].name }}
-      </p>
-    </ng-container>
-    <ng-template #multipleDirectors>
-      <p>
-        <b><ng-container i18n="@@informations.directors">Directors</ng-container></b>:
-      </p>
-      <ul *ngFor="let director of directors">
-        <li>{{director.name}}</li>
+<div [ngStyle]="{ 'background-image': 'url(&quot;' + 'http://image.tmdb.org/t/p/w1280' + data?.backdrop_path + '&quot;)' }" class="modal">
+  <div class="modal_content">
+    <div class="modal_content--note">{{data?.vote_average}}</div>
+    <h1 mat-dialog-title class="modal_content_title">{{data?.title}}</h1>
+    <div mat-dialog-content class="modal_content_infos">
+      <p>{{data?.overview}}</p>
+      <hr class="modal_content_infos--line">
+      <ng-container *ngIf="directors.length == 1; else multipleDirectors">
+        <p>
+          <b><ng-container i18n="@@informations.director">Director</ng-container></b>: {{ directors[0].name }}
+        </p>
+      </ng-container>
+      <ng-template #multipleDirectors>
+        <p>
+          <b><ng-container i18n="@@informations.directors">Directors</ng-container></b>:
+        </p>
+        <ul *ngFor="let director of directors">
+          <li>{{director.name}}</li>
+        </ul>
+      </ng-template>
+      <p><b><ng-container i18n="@@informations.actors">Major actors</ng-container></b>:</p>
+      <ul *ngFor="let actor of actors">
+        <li>{{actor.name}}</li>
       </ul>
-    </ng-template>
+    </div>
   </div>
-  <div *ngIf="actors$ | async as actors">
-    <p><b><ng-container i18n="@@informations.actors">Major actors</ng-container></b>:</p>
-    <ul *ngFor="let actor of actors">
-      <li>{{actor.name}}</li>
-    </ul>
+  <mat-button-toggle-group class="modal_content_toggle-group toggle-group" name="save" vertical="true" aria-label="Save Movie" multiple>
+    <mat-button-toggle matTooltip="Add to Watched list" class="toggle-button button-seen" mat-icon-button aria-label="watched button" [checked]="isWatched$ | async" (change)="addWatched(data?.id)">
+      <mat-icon>check</mat-icon>
+    </mat-button-toggle>
+    <mat-button-toggle matTooltip="Add to To Watch list" class="toggle-button button-toWatch" mat-icon-button aria-label="to watch button" [checked]="isToWatch$ | async" (change)="addToWatch(data?.id)">
+      <mat-icon>remove_red_eye</mat-icon>
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+  <div mat-dialog-actions class="modal--close">
+    <button mat-button [mat-dialog-close]="" cdkFocusInitial></button>
   </div>
-  <p><b>Synopsis</b> : {{data?.overview}}
-</div>
-<div mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="" cdkFocusInitial><ng-container i18n="@@informations.close">Close</ng-container></button>
 </div>

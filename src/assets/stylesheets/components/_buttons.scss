@@ -1,0 +1,44 @@
+.toggle-group {
+  position: absolute !important;
+  height: 122px;
+  border: none !important;
+}
+
+.toggle-button {
+  width: 0;
+  height: 0;
+  border-style: solid !important;
+  border-width: 28px 0 28px 49px !important;
+  margin-bottom: 10px;
+  background: none !important;
+}
+
+.button-seen {
+  border-color: transparent transparent transparent $seen !important;
+}
+
+.button-toWatch {
+  border-color: transparent transparent transparent $toWatch !important;
+}
+
+.button-remove {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-radius: 22px;
+  margin-left: 293px;
+  margin-top: -11px;
+  background-color: white;
+  color: black;
+  font-weight: bold;
+  padding: 0;
+  display: none;
+
+  &::before {
+    content: "×";
+    display: flex;
+    font-size: 150%;
+    margin-left: 1px;
+    margin-top: -2px;
+  }
+}

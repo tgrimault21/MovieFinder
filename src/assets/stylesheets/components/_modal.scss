@@ -1,0 +1,51 @@
+.modal {
+  height: 100%;
+  position: relative;
+  background-size: cover;
+
+  &_content {
+    width: 643px;
+    height: 782px;
+    margin-top: 34px;
+    margin-left: 104px;
+    background: #00000080 0% 0% no-repeat padding-box;
+    position: absolute;
+    color: white;
+    border-radius: 10px;
+    overflow: auto;
+
+    &--note {
+      float: right;
+      margin: 20px;
+      font-size: 48px;
+    }
+
+    &_title {
+      position: relative;
+      font-size: 70px;
+      margin-left: 42px !important;
+      margin-top: 102px !important;
+      line-height: 72px;
+    }
+
+    &_infos {
+      position: relative;
+      margin: 29px 72px !important;
+      overflow: unset !important;
+
+      &--line {
+        margin: 36px 0;
+      }
+    }
+
+    &_toggle-group {
+      margin-left: 730px;
+      margin-top: 345px;
+    }
+  }
+
+  &--close {
+    float: right;
+    margin: 25px;
+  }
+}

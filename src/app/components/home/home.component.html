@@ -27,19 +27,19 @@
   </form>
 
   <nav mat-tab-nav-bar class="button-group">
-    <a mat-tab-link class="button button-primary"
+    <a mat-tab-link class="button background-primary"
       routerLink="/list"
       routerLinkActive="button-active" #rla1="routerLinkActive"
       [active]="rla1.isActive">
       <ng-container i18n="@@home.moviesList"><mat-icon>play_arrow</mat-icon> Movie<b>List</b></ng-container>
     </a>
-    <a mat-tab-link class="button button-seen"
+    <a mat-tab-link class="button background-seen"
       routerLink="/watched"
       routerLinkActive="button-active" #rla1="routerLinkActive"
       [active]="rla1.isActive">
        <ng-container i18n="@@home.watchedList"><mat-icon>check</mat-icon> Movie<b>Seen</b></ng-container>
     </a>
-    <a mat-tab-link class="button button-towatch"
+    <a mat-tab-link class="button background-toWatch"
       routerLink="/to-watch"
       routerLinkActive="button-active" #rla1="routerLinkActive"
       [active]="rla1.isActive">
@@ -48,22 +48,8 @@
   </nav>
 </mat-toolbar>
 
-<section class="main-body">
-  <h2 class="main-body_title"></h2>
+<section class="main-body" *ngIf="title$ | async as title">
+  <h2 class="main-body_title" [ngClass]="title.class"><mat-icon class="main-body_title_icon">{{title.icon}}</mat-icon>{{title.title}}</h2>
   <router-outlet></router-outlet>
 </section>
-<!-- <nav mat-tab-nav-bar>
-  <a mat-tab-link
-    >
-    <ng-container i18n="@@home.moviesList">Movies List</ng-container>
-  </a>
-  <a mat-tab-link
-    >
-     <ng-container i18n="@@home.watchedList">Watched Movies</ng-container>
-  </a>
-  <a mat-tab-link
-    >
-     <ng-container i18n="@@home.towatchList">Movies to watch</ng-container>
-  </a>
-</nav> -->
 

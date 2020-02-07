@@ -14,6 +14,8 @@ export interface Movie {
     overview?: string;
     cast?: Cast[];
     crew?: Crew[];
+    backdrop_path?: string;
+    vote_average?: number;
 }
 
 export interface Cast {
@@ -72,7 +74,9 @@ export class MovieService {
           release_date: res.release_date,
           id: res.id,
           poster_path: res.poster_path,
-          overview: res.overview
+          overview: res.overview,
+          backdrop_path: res.backdrop_path,
+          vote_average: res.vote_average
         };
       }));
   }

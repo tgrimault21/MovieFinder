@@ -1,6 +1,42 @@
-<div class="movie-card">
-  <img class="movie-card_body" [src]="'http://image.tmdb.org/t/p/w185' + movie?.poster_path" alt="Poster image" (click)="openDialog(movie)">
-</div>
+<ng-container *ngIf="first">
+  <div class="top-movie_card">
+    <app-toggle-buttons [movie]="movie" class="top-movie_toggle-buttons"></app-toggle-buttons>
+    <div class="top-movie_card--click" (click)="openDialog(movie)">
+      <img class="top-movie_poster" [src]="'http://image.tmdb.org/t/p/w185' + movie?.poster_path" alt="Poster image"/>
+      <section class="top-movie_informations">
+        <h1 class="top-movie_title">{{movie?.title}}</h1>
+        <hr class="top-movie_break">
+        <section class="top-movie_description">
+        <p class="top-movie_synopsis">{{movie?.overview}}</p>
+          <ng-container *ngIf="directors.length == 1; else multipleDirectors">
+            <p>
+              <b><ng-container i18n="@@informations.director">Director</ng-container></b>: {{ directors[0].name }}
+            </p>
+          </ng-container>
+          <ng-template #multipleDirectors>
+            <p>
+              <b><ng-container i18n="@@informations.directors">Directors</ng-container></b>:
+            </p>
+            <ul class="top-movie_list">
+              <li *ngFor="let director of directors" class="top-movie_list_item">{{director.name}}</li>
+            </ul>
+          </ng-template>
+          <p><b><ng-container i18n="@@informations.actors">Major actors</ng-container></b>:</p>
+          <ul class="top-movie_list">
+            <li *ngFor="let actor of actors" class="top-movie_list_item">{{actor.name}}</li>
+          </ul>
+        </section>
+      </section>
+    </div>
+  </div>
+</ng-container>
+<ng-container *ngIf="!first">
+  <div class="movie-card">
+    <ng-content></ng-content>
+
+    <img class="movie-card_body" [src]="'http://image.tmdb.org/t/p/w185' + movie?.poster_path" alt="Poster image" (click)="openDialog(movie)">
+  </div>
+</ng-container>
 
 <!-- <mat-card>
     <mat-card-header>

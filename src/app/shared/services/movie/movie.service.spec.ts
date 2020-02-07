@@ -83,7 +83,7 @@ describe('MovieService', () => {
           release_date: '',
           id: 1,
           poster_path: '',
-          overview: ''
+          overview: '',
       }));
       service.fetch(1).subscribe(res => {
         expect(res).toEqual({

@@ -4,15 +4,30 @@
   height: 448px;
   margin: 40px;
   box-sizing: border-box;
+  cursor: pointer;
 
   &:hover {
     border: 2px solid #FFFFFF;
     box-shadow: 0px 0px 10px #FFFFFF;
+
+    & .movie-card_toggle-group {
+      display: inline-flex !important;
+    }
+
+    & .button-remove {
+      display: block;
+    }
   }
 
   &_body {
     width: 100%;
     object-fit: cover;
     height: 100%;
+  }
+
+  &_toggle-group {
+    margin-top: 161px;
+    margin-left: 285px;
+    display: none !important;
   }
 }

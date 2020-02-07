@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Movie, Movies, Response } from '../movie/movie.service';
 import { Observable } from 'rxjs';
-import { Router, ActivatedRoute } from '@angular/router';
-import { map } from 'rxjs/operators';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { map, filter, tap, shareReplay } from 'rxjs/operators';
 
 export interface Filters {
   text?: string;
@@ -19,10 +19,11 @@ export class FilterService {
   private moviesAfterGenreFilter: Movies = [];
 
   public filterChange: Observable<Filters>;
+  public route: Observable<{title: string, class: string, icon: string}>;
 
   constructor(
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    activatedRoute: ActivatedRoute
   ) {
     this.filterChange = activatedRoute.queryParams
       .pipe(
@@ -42,6 +43,42 @@ export class FilterService {
             releasedBefore: +params.releasedbefore
           };
         })
+      );
+    this.route = router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        map((event: NavigationEnd) => {
+          if (!event.url) {
+            return;
+          }
+          if (event.url === '/list' || event.url.includes('/list?movie=&')) {
+            return {
+              title: 'TopMovie',
+              class: 'primary',
+              icon: 'play_arrow'
+            };
+          }
+          if (event.url === '/watched') {
+            return {
+              title: 'MovieSeen',
+              class: 'seen',
+              icon: 'check'
+            };
+          }
+          if (event.url === '/to-watch') {
+            return {
+              title: 'MovieToWatch',
+              class: 'toWatch',
+              icon: 'remove_red_eye'
+            };
+          }
+          return {
+            title: 'SearchResult',
+            class: 'primary',
+            icon: 'play_arrow'
+          };
+        }),
+        shareReplay(1)
       );
   }
 

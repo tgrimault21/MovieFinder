@@ -1,58 +1,81 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { Movie, MovieService, Cast, Crew } from 'src/app/shared/services/movie/movie.service';
+import { Observable, Subject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
+import { Movie, Cast, Crew } from 'src/app/shared/services/movie/movie.service';
+import { LibraryService } from 'src/app/shared/services/library/library.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-informations',
   templateUrl: './informations.component.html',
   styleUrls: ['./informations.component.css']
 })
-export class InformationsComponent implements OnInit {
+export class InformationsComponent implements OnInit, OnDestroy {
   /**
    * @internal
    */
-  public director$: Observable<Crew[]>;
+  public directors: Crew[];
   /**
    * @internal
    */
-  public actors$: Observable<Cast[]>;
+  public actors: Cast[];
   /**
    * @internal
    */
   public movieCredits$: Observable<Movie>;
+  public isWatched$: Observable<boolean>;
+  public isToWatch$: Observable<boolean>;
+
+  private destroy$ = new Subject();
 
   constructor(
     public dialogRef: MatDialogRef<InformationsComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: any,
-    private movie: MovieService
+    @Inject(MAT_DIALOG_DATA) private data: Movie,
+    private library: LibraryService,
+    private router: Router
     ) {}
 
   public ngOnInit() {
-    this.getCredits();
+    this.isWatched$ = this.library.watchedListChange.pipe(map(ids => {
+      return ids.includes(this.data.id);
+    }));
+    this.isToWatch$ = this.library.toWatchListChange.pipe(map(ids => {
+      return ids.includes(this.data.id);
+    }));
+    this.actors = this.data.cast;
+    this.directors = this.data.crew;
+
+    this.router.events.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(event => {
+      if (event) {
+        this.dialogRef.close();
+      }
+    });
+  }
+
+  public ngOnDestroy() {
+    this.destroy$.next();
+  }
+
+  /**
+   * Add or remove a movie to/from watched list
+   * @param id id of the movie to add or remove from watched list
+   */
+  public addWatched(id: number) {
+    this.library.toggleWatched(id);
+  }
+
+  /**
+   * Add or remove a movie to/from toWatch list
+   * @param id id of the movie to add or remove from toWatch list
+   */
+  public addToWatch(id: number) {
+    this.library.toggleToWatch(id);
   }
 
   public onNoClick(): void {
     this.dialogRef.close();
-  }
-
-  /**
-   * Get the director and the top 5 actors of the movie we want more details on
-   */
-   private getCredits() {
-    if (!this.data.id) {
-      return;
-    }
-
-    this.movieCredits$ = this.movie.fetchCredits(this.data.id);
-
-    this.actors$ = this.movieCredits$.pipe(map(res => {
-      return res.cast.slice(0, 5);
-    }));
-
-    this.director$ = this.movieCredits$.pipe(map(res => {
-      return res.crew.filter(staff => staff.department === 'Directing');
-    }));
   }
 }

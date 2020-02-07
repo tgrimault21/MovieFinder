@@ -1,6 +1,11 @@
 @import 'abstracts/constants';
 
+@import 'themes/theme';
+
+@import 'components/buttons';
 @import 'components/card';
+@import 'components/modal';
+@import 'components/bigCard';
 
 @import 'layout/grid';
 @import 'layout/header';

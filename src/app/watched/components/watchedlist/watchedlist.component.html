@@ -1,14 +1,7 @@
 <div *ngIf="movieList$" class="cards-list">
   <ng-container *ngFor="let result of movieList$ | async">
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>{{ result?.title }}</mat-card-title>
-      </mat-card-header>
-      <img mat-card-image [src]="'http://image.tmdb.org/t/p/w185' + result.poster_path" alt="Poster image">
-      <mat-card-content>
-        <p *ngIf="result?.release_date"><ng-container i18n="@@watchedlist.releaseDate">Release date:</ng-container> {{ result?.release_date }}</p>
-        <p *ngIf="result?.runtime"><ng-container i18n="@@watchedlist.duration">Duration:</ng-container> {{ result?.runtime }} minutes</p>
-      </mat-card-content>
-    </mat-card>
+    <app-movie [movie]="result">
+      <button class="button-remove" (click)="removeWatched(result?.id)"></button>
+    </app-movie>
   </ng-container>
 </div>

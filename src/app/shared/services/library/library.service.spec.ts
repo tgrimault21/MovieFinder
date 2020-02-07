@@ -52,40 +52,6 @@ describe('Library', () => {
     });
   });
 
-  describe('isWatched', () => {
-    it('should return true', () => {
-      spyOn(local, 'getItem').and.returnValue('"[10]"');
-      expect(library.isWatched(10)).toBeTruthy();
-    });
-
-    it('should return true', () => {
-      spyOn(local, 'getItem').and.returnValue('"[10,20]"');
-      expect(library.isWatched(20)).toBeTruthy();
-    });
-
-    it('should return false', () => {
-      spyOn(local, 'getItem').and.returnValue('"[10,20]"');
-      expect(library.isWatched(30)).toBeFalsy();
-    });
-  });
-
-  describe('isToWatch', () => {
-    it('should return true', () => {
-      spyOn(local, 'getItem').and.returnValue('"[10]"');
-      expect(library.isToWatch(10)).toBeTruthy();
-    });
-
-    it('should return true', () => {
-      spyOn(local, 'getItem').and.returnValue('"[10,20]"');
-      expect(library.isToWatch(20)).toBeTruthy();
-    });
-
-    it('should return false', () => {
-      spyOn(local, 'getItem').and.returnValue('"[10,20]"');
-      expect(library.isToWatch(30)).toBeFalsy();
-    });
-  });
-
   describe('loadWatched', () => {
     it('should load watched storage', () => {
       const watchedSpy = spyOn(library.watchedListChange, 'next');

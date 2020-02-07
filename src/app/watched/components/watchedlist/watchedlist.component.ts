@@ -25,6 +25,10 @@ export class WatchedlistComponent implements OnInit {
     ));
   }
 
+  public removeWatched(id: number) {
+    this.library.toggleWatched(id);
+  }
+
   /**
    * List in movieList the details of every movie watched based on the list of ids in local storage
    * @param ids list of movie id

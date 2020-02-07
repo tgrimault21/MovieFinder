@@ -139,3 +139,46 @@
 .mat-toolbar h1 {
   font: inherit;
 }
+
+.mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+  padding: 5px 12px 0 5px !important;
+}
+
+.mat-button-toggle-button {
+  display: flex;
+  margin: -28px 0 0 -49px !important;
+  height: 56px;
+  width: 49px;
+}
+
+.mat-button-toggle-checked {
+  color: white !important;
+}
+
+.cdk-overlay-pane {
+  width: 100% !important;
+  height: 100% !important;
+  position: relative !important;
+  margin-top: 282px;
+  max-width: none !important;
+}
+
+.mat-dialog-container {
+  padding: 0 !important;
+}
+
+.modal .mat-button {
+  border: 3px solid white;
+  border-radius: 42px;
+  height: 42px;
+  min-width: unset;
+  width: 42px;
+  color: white;
+  padding: 0;
+  padding-top: 2px;
+
+  &::before {
+    content: "×";
+    font-size: 300%;
+  }
+}

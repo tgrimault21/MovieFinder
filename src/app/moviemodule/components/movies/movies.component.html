@@ -1,5 +1,19 @@
 <div *ngIf="dataMovie$ | async as dataMovies" class="cards-list">
-  <ng-container *ngFor="let result of dataMovies">
-    <app-movie [movie]="result"></app-movie>
+  <ng-container *ngIf="route$ | async as route">
+    <ng-container *ngIf="route.title === 'TopMovie'">
+      <ng-container *ngFor="let result of dataMovies; let first = first">
+        <app-movie [movie]="result" [first]="first">
+          <app-toggle-buttons [movie]="result"></app-toggle-buttons>
+        </app-movie>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngIf="route.title !== 'TopMovie'">
+      <ng-container *ngFor="let result of dataMovies">
+         <ng-container *ngFor="let result of dataMovies"></ng-container>
+          <app-movie [movie]="result">
+            <app-toggle-buttons [movie]="result"></app-toggle-buttons>
+          </app-movie>
+       </ng-container>
+      </ng-container>
   </ng-container>
 </div>

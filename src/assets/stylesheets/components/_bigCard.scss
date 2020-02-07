@@ -1,0 +1,89 @@
+.top-movie {
+  &_card {
+    background: rgba(255,255,255,0.19);
+    box-shadow: 0px 3px 6px #000000;
+    border-radius: 15px;
+    width: 1230px;
+    height: 444px;
+    margin: 40px;
+    box-sizing: border-box;
+    display: flex;
+    color: white;
+    cursor: pointer;
+
+    &:hover {
+      border: 2px solid #FFFFFF;
+      box-shadow: 0px 0px 10px #FFFFFF;
+    }
+
+    &--click {
+      display: flex;
+    }
+  }
+
+  &_informations {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &_toggle-buttons {
+    display: flex;
+
+    .toggle-group {
+      display: inline-flex !important;
+      margin: 10px 0 0 1054px !important;
+      height: 56px !important;
+      flex-direction: row;
+      padding-top: 28px;
+
+      .toggle-button {
+        margin-left: 24px;
+      }
+    }
+  }
+
+  &_poster {
+    height: 384px;
+    margin: 30px;
+    margin-right: 56px;
+    opacity: 1;
+  }
+
+  &_description {
+    overflow: auto;
+    margin: 20px 40px 20px 0;
+  }
+
+  &_title {
+    margin: 28px 48px 38px 0;
+    font-size: 62px;
+  }
+
+  &_synopsis {
+    font-size: 14px;
+  }
+
+  &_break {
+    height: max-content;
+    width: 96%;
+    margin-left: 0;
+  }
+
+  &_list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    &_item {
+      display: inline;
+
+      &::after{
+        content: ", ";
+      }
+
+      &:last-child::after{
+        content: "";
+      }
+    }
+  }
+}

@@ -12,4 +12,14 @@
   background-attachment: fixed;
   margin-top: 141px;
   min-height: 100%;
+
+  &_title {
+    padding-top: 65px;
+    margin-left: 69px;
+
+    &_icon {
+      margin-right: 10px;
+      vertical-align: text-top;
+    }
+  }
 }

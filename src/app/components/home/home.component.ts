@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GenreService, Genres, Genre } from 'src/app/shared/services/genre/genre.service';
-import { Observable } from 'rxjs';
+import { Observable, Subject, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { FilterService } from 'src/app/shared/services/filter/filter.service';
 
@@ -21,6 +21,7 @@ export class HomeComponent implements OnInit {
   public filters$: Observable<{name: string}>;
   public isFetched = false;
   public genres: Genres;
+  public title$: Observable<{title: string, class: string, icon: string}>;
 
   constructor(
     private genre: GenreService,
@@ -36,6 +37,7 @@ export class HomeComponent implements OnInit {
         };
       })
     );
+    this.title$ = this.filterService.route;
   }
 
   /**

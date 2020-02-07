@@ -25,6 +25,10 @@ export class TowatchlistComponent implements OnInit {
     this.library.loadToWatch();
   }
 
+  public removeToWatch(id: number) {
+    this.library.toggleToWatch(id);
+  }
+
   /**
    * List in movieList the details of every movie to watch based on the list of ids in local storage
    * @param ids list of movie ids

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Movies, MovieService } from 'src/app/shared/services/movie/movie.service';
-import { Observable, EMPTY, merge, of, forkJoin } from 'rxjs';
+import { Movies, MovieService, Movie } from 'src/app/shared/services/movie/movie.service';
+import { Observable, EMPTY, merge, of, forkJoin, combineLatest } from 'rxjs';
 import { map, switchMap, tap, partition } from 'rxjs/operators';
 import { FilterService, Filters } from 'src/app/shared/services/filter/filter.service';
 
@@ -11,6 +11,7 @@ import { FilterService, Filters } from 'src/app/shared/services/filter/filter.se
 })
 export class MoviesComponent implements OnInit {
   public dataMovie$: Observable<Movies> = EMPTY;
+  public route$: Observable<{title: string, class: string, icon: string}>;
 
   private nbDisplay = 10;
 
@@ -20,6 +21,8 @@ export class MoviesComponent implements OnInit {
   ) { }
 
   public ngOnInit() {
+    this.route$ = this.filterService.route;
+
     const filterChange = this.filterService.filterChange;
     const [popular, search] = partition((filters: Filters) => (filters.text || '').length === 0)(filterChange);
 
@@ -77,7 +80,31 @@ export class MoviesComponent implements OnInit {
     }
 
     return forkJoin(
-      movies.map( movieId => this.movie.fetch(movieId))
+      movies.map( movieId => combineLatest(this.movie.fetch(movieId), this.getCredits(movieId)).pipe(switchMap(([details, credits]) => {
+        return of({
+          ...details,
+          ...credits
+        });
+      })))
     );
+  }
+
+  /**
+   * Get the director and the top 5 actors of the movie we want more details on
+   */
+  private getCredits(id: number): Observable<Movie> {
+    if (!id) {
+      return;
+    }
+
+    const movieCredits$ = this.movie.fetchCredits(id);
+
+    return movieCredits$.pipe(map(res => {
+      return {
+        id: res.id,
+        cast : res.cast.slice(0, 5),
+        crew: res.crew.filter(staff => staff.department === 'Directing')
+      };
+    }));
   }
 }

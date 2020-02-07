@@ -7,6 +7,7 @@ import { InformationsComponent } from '../moviemodule/components/informations/in
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { SharedModule } from '../shared/shared.module';
+import { MatButtonToggleModule, MatIconModule } from '@angular/material';
 
 
 @NgModule({
@@ -19,7 +20,9 @@ import { SharedModule } from '../shared/shared.module';
     MoviemoduleRoutingModule,
     SharedModule,
     MatDialogModule,
-    MatButtonModule
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatIconModule
   ],
   entryComponents: [InformationsComponent]
 })

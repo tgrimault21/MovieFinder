@@ -54,24 +54,6 @@ export class LibraryService {
   }
 
   /**
-   * To keep watched toggle button pressed if the movie we test is in the watched list
-   * @param id the identifier of a media
-   * @returns true if the media is watched by the user
-   */
-  public isWatched(id: number): boolean {
-    return JSON.parse(this.localStorage.getItem('watched')) && JSON.parse(this.localStorage.getItem('watched')).includes(id);
-  }
-
-  /**
-   * To keep toWatch toggle button pressed if the movie we test is in the toWatch list
-   * @param id the identifier of a media
-   * @returns true if the media is watched by the user
-   */
-  public isToWatch(id: number): boolean {
-    return JSON.parse(this.localStorage.getItem('toWatch')) && JSON.parse(this.localStorage.getItem('toWatch')).includes(id);
-  }
-
-  /**
    * Put local storage content in an array, for watched movies
    */
   public loadWatched() {
