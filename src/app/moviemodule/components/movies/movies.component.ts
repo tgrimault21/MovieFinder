@@ -67,44 +67,6 @@ export class MoviesComponent implements OnInit {
    * @param nbDisplay number of movies to display on screen
    */
   private extraction(movies: number[], nbDisplay: number): Observable<Movies> {
-    return this.getMovieDetails(movies.splice(0, nbDisplay));
-  }
-
-  /**
-   * Put details of every movie shown on the screen in an array
-   * @param movies list of 10 ids
-   */
-  private getMovieDetails(movies: number[]): Observable<Movies> {
-    if (movies.length === 0) {
-      return of([]);
-    }
-
-    return forkJoin(
-      movies.map( movieId => combineLatest(this.movie.fetch(movieId), this.getCredits(movieId)).pipe(switchMap(([details, credits]) => {
-        return of({
-          ...details,
-          ...credits
-        });
-      })))
-    );
-  }
-
-  /**
-   * Get the director and the top 5 actors of the movie we want more details on
-   */
-  private getCredits(id: number): Observable<Movie> {
-    if (!id) {
-      return;
-    }
-
-    const movieCredits$ = this.movie.fetchCredits(id);
-
-    return movieCredits$.pipe(map(res => {
-      return {
-        id: res.id,
-        cast : res.cast.slice(0, 5),
-        crew: res.crew.filter(staff => staff.department === 'Directing')
-      };
-    }));
+    return this.filterService.getMovieDetails(movies.splice(0, nbDisplay));
   }
 }

@@ -14,11 +14,11 @@
 }
 
 .button-seen {
-  border-color: transparent transparent transparent $seen !important;
+  border-color: transparent transparent transparent $color-seen !important;
 }
 
 .button-toWatch {
-  border-color: transparent transparent transparent $toWatch !important;
+  border-color: transparent transparent transparent $color-toWatch !important;
 }
 
 .button-remove {
@@ -41,4 +41,20 @@
     margin-left: 1px;
     margin-top: -2px;
   }
+}
+
+.button__header--primary {
+  background-color: $color-primary;
+}
+
+.button__header--seen {
+  background-color: $color-seen;
+}
+
+.button__header--toWatch {
+  background-color: $color-toWatch;
+}
+
+.button--active {
+  border: 2px solid hsla(0, 0%, 100%, 1);
 }

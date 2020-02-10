@@ -81,6 +81,16 @@
   font-size: 16px;
 }
 
-.button-active {
-  border: 2px solid hsla(0, 0%, 100%, 1);
+.main-body_title {
+  &--primary {
+    color: $color-primary;
+  }
+
+  &--seen {
+    color: $color-seen;
+  }
+
+  &--toWatch {
+    color: $color-toWatch;
+  }
 }

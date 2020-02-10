@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Movie, Movies, Response } from '../movie/movie.service';
-import { Observable } from 'rxjs';
+import { Movie, Movies, Response, MovieService } from '../movie/movie.service';
+import { Observable, of, forkJoin, combineLatest } from 'rxjs';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import { map, filter, tap, shareReplay } from 'rxjs/operators';
+import { map, filter, tap, shareReplay, switchMap } from 'rxjs/operators';
 
 export interface Filters {
   text?: string;
@@ -23,6 +23,7 @@ export class FilterService {
 
   constructor(
     private router: Router,
+    private movie: MovieService,
     activatedRoute: ActivatedRoute
   ) {
     this.filterChange = activatedRoute.queryParams
@@ -113,6 +114,44 @@ export class FilterService {
    */
   public takeIdOutOfMovies(movies: Movies): number[] {
     return movies.map(res => res.id);
+  }
+
+  /**
+   * Put details of every movie shown on the screen in an array
+   * @param movies list of 10 ids
+   */
+  public getMovieDetails(movies: number[]): Observable<Movies> {
+    if (movies.length === 0) {
+      return of([]);
+    }
+
+    return forkJoin(
+      movies.map( movieId => combineLatest(this.movie.fetch(movieId), this.getCredits(movieId)).pipe(switchMap(([details, credits]) => {
+        return of({
+          ...details,
+          ...credits
+        });
+      })))
+    );
+  }
+
+  /**
+   * Get the director and the top 5 actors of the movie we want more details on
+   */
+  private getCredits(id: number): Observable<Movie> {
+    if (!id) {
+      return;
+    }
+
+    const movieCredits$ = this.movie.fetchCredits(id);
+
+    return movieCredits$.pipe(map(res => {
+      return {
+        id: res.id,
+        cast : res.cast.slice(0, 5),
+        crew: res.crew.filter(staff => staff.department === 'Directing')
+      };
+    }));
   }
 
  /**

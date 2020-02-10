@@ -27,21 +27,21 @@
   </form>
 
   <nav mat-tab-nav-bar class="button-group">
-    <a mat-tab-link class="button background-primary"
+    <a mat-tab-link class="button button__header--primary"
       routerLink="/list"
-      routerLinkActive="button-active" #rla1="routerLinkActive"
+      routerLinkActive="button--active" #rla1="routerLinkActive"
       [active]="rla1.isActive">
       <ng-container i18n="@@home.moviesList"><mat-icon>play_arrow</mat-icon> Movie<b>List</b></ng-container>
     </a>
-    <a mat-tab-link class="button background-seen"
+    <a mat-tab-link class="button button__header--seen"
       routerLink="/watched"
-      routerLinkActive="button-active" #rla1="routerLinkActive"
+      routerLinkActive="button--active" #rla1="routerLinkActive"
       [active]="rla1.isActive">
        <ng-container i18n="@@home.watchedList"><mat-icon>check</mat-icon> Movie<b>Seen</b></ng-container>
     </a>
-    <a mat-tab-link class="button background-toWatch"
+    <a mat-tab-link class="button button__header--toWatch"
       routerLink="/to-watch"
-      routerLinkActive="button-active" #rla1="routerLinkActive"
+      routerLinkActive="button--active" #rla1="routerLinkActive"
       [active]="rla1.isActive">
        <ng-container i18n="@@home.towatchList"><mat-icon>remove_red_eye</mat-icon> Movie<b>ToWatch</b></ng-container>
     </a>
@@ -49,7 +49,7 @@
 </mat-toolbar>
 
 <section class="main-body" *ngIf="title$ | async as title">
-  <h2 class="main-body_title" [ngClass]="title.class"><mat-icon class="main-body_title_icon">{{title.icon}}</mat-icon>{{title.title}}</h2>
+  <h2 class="main-body_title" [ngClass]="'main-body_title--' + title.class"><mat-icon class="main-body_title_icon">{{title.icon}}</mat-icon>{{title.title}}</h2>
   <router-outlet></router-outlet>
 </section>
 

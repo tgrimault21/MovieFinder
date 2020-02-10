@@ -3,6 +3,7 @@ import { LibraryService } from 'src/app/shared/services/library/library.service'
 import { Movies, MovieService } from 'src/app/shared/services/movie/movie.service';
 import { switchMap } from 'rxjs/operators';
 import { Observable, forkJoin, EMPTY, of } from 'rxjs';
+import { FilterService } from 'src/app/shared/services/filter/filter.service';
 
 @Component({
   selector: 'app-watchedlist',
@@ -14,33 +15,18 @@ export class WatchedlistComponent implements OnInit {
 
   constructor(
     private library: LibraryService,
-    private movie: MovieService
+    private filterService: FilterService
     ) {}
 
   public ngOnInit() {
     this.library.loadWatched();
 
     this.movieList$ = this.library.watchedListChange.pipe(switchMap(
-      ids => this.getMoviesWatched(ids)
+      ids => this.filterService.getMovieDetails(ids)
     ));
   }
 
   public removeWatched(id: number) {
     this.library.toggleWatched(id);
   }
-
-  /**
-   * List in movieList the details of every movie watched based on the list of ids in local storage
-   * @param ids list of movie id
-   */
-  private getMoviesWatched(ids: number[]): Observable<Movies> {
-    if (ids.length === 0) {
-      return of([]);
-    }
-
-    return forkJoin(
-      ids.map(idMoviesWatched => this.movie.fetch(idMoviesWatched))
-    );
-  }
-
 }

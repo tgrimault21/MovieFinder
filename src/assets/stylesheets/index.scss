@@ -1,16 +1,16 @@
-@import 'abstracts/constants';
+@import 'abstracts/variables';
 
-@import 'themes/theme';
+@import 'base/typography';
 
 @import 'components/buttons';
 @import 'components/card';
 @import 'components/modal';
-@import 'components/bigCard';
+@import 'components/top-movie';
 
 @import 'layout/grid';
 @import 'layout/header';
 
-@import 'base/typography';
+@import 'themes/theme';
 
 @import 'vendors/material';
 
