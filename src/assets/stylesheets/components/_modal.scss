@@ -3,7 +3,7 @@
   position: relative;
   background-size: cover;
 
-  &_content {
+  &-content {
     width: 643px;
     height: 782px;
     margin-top: 34px;
@@ -14,33 +14,45 @@
     border-radius: 10px;
     overflow: auto;
 
-    &--note {
-      float: right;
+    &_toggle-group {
+      margin-left: 730px;
+      margin-top: 345px;
+    }
+  }
+
+  &-header {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    &_note {
       margin: 20px;
       font-size: 48px;
+      align-self: flex-end;
     }
 
     &_title {
       position: relative;
       font-size: 70px;
       margin-left: 42px !important;
-      margin-top: 102px !important;
       line-height: 72px;
     }
+  }
 
+  &-body {
     &_infos {
       position: relative;
       margin: 29px 72px !important;
       overflow: unset !important;
 
-      &--line {
+      &-line {
         margin: 36px 0;
       }
-    }
 
-    &_toggle-group {
-      margin-left: 730px;
-      margin-top: 345px;
+      &-title {
+        font-weight: bold;
+        font-size: 18px;
+      }
     }
   }
 

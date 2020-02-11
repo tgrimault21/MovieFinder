@@ -9,7 +9,7 @@
     <mat-form-field class="form_field form_field--search" appearance="outline" floatLabel="never">
       <input matInput placeholder="Search" i18n-placeholder="@@home.namePlaceholder" [(ngModel)]="filters.name" name="searchMovie" required>
       <button mat-mini-fab class="form_button--search">
-        <mat-icon class="form_button-search_icon">search</mat-icon>
+        <mat-icon>search</mat-icon>
       </button>
     </mat-form-field>
     <mat-form-field class="form_field form_field--select" appearance="outline" floatLabel="never">
@@ -27,23 +27,23 @@
   </form>
 
   <nav mat-tab-nav-bar class="button-group">
-    <a mat-tab-link class="button button__header--primary"
+    <a mat-tab-link class="button button-header--primary"
       routerLink="/list"
       routerLinkActive="button--active" #rla1="routerLinkActive"
       [active]="rla1.isActive">
-      <ng-container i18n="@@home.moviesList"><mat-icon>play_arrow</mat-icon> Movie<b>List</b></ng-container>
+      <ng-container i18n="@@home.moviesList"><mat-icon>play_arrow</mat-icon>Movie<b>List</b></ng-container>
     </a>
-    <a mat-tab-link class="button button__header--seen"
+    <a mat-tab-link class="button button-header--seen"
       routerLink="/watched"
       routerLinkActive="button--active" #rla1="routerLinkActive"
       [active]="rla1.isActive">
-       <ng-container i18n="@@home.watchedList"><mat-icon>check</mat-icon> Movie<b>Seen</b></ng-container>
+       <ng-container i18n="@@home.watchedList"><mat-icon>check</mat-icon>Movie<b>Seen</b></ng-container>
     </a>
-    <a mat-tab-link class="button button__header--toWatch"
+    <a mat-tab-link class="button button-header--toWatch"
       routerLink="/to-watch"
       routerLinkActive="button--active" #rla1="routerLinkActive"
       [active]="rla1.isActive">
-       <ng-container i18n="@@home.towatchList"><mat-icon>remove_red_eye</mat-icon> Movie<b>ToWatch</b></ng-container>
+       <ng-container i18n="@@home.towatchList"><mat-icon>remove_red_eye</mat-icon>Movie<b>ToWatch</b></ng-container>
     </a>
   </nav>
 </mat-toolbar>
